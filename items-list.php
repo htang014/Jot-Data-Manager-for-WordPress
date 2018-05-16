@@ -12,7 +12,8 @@ function fill_list_page($id, $options)
     }
     ?>
     
-	<div class="wrap" data-id="<?php echo $id ?>" data-name="<?php echo htmlspecialchars($options['name']) ?>">
+    <div class="wrap" data-id="<?php echo $id ?>" data-name="<?php echo $id ?>">
+
 	<?php
     foreach ($options['displayColumns'] as $value) {
         assert(in_array($value, $db_fields));
@@ -20,11 +21,12 @@ function fill_list_page($id, $options)
     ?>
 
 <h1 class="wp-heading-inline"><?php echo $options['name'] ?></h1>
-<a href=<?php menu_page_url('db-edit/' . $options['name'] . '-add.php')?> class="page-title-action">Add New</a>
+<a href=<?php menu_page_url('db-edit/' . $id . '-add.php')?> class="page-title-action">Add New</a>
+
 
 <form action="<?php echo "admin.php" ?>" method="get" >
     <p class="search-box">
-        <input type="hidden" name="page" value="<?php echo "db-edit/".$options['name']."-list.php" ?>"/>
+        <input type="hidden" name="page" value="<?php echo "db-edit/".$id."-list.php" ?>"/>
         <input type="search" name="filter"/>
         <input class="button-secondary" type="submit" value="Search"/>
     </p>
@@ -49,7 +51,7 @@ function fill_list_page($id, $options)
     $statement->execute();
     $statement->setFetchMode(PDO::FETCH_ASSOC);
     while ($row = $statement->fetch()) {
-        echo generate_table($options,
+        echo generate_table($id, $options,
             $options['split'] ? $row[$options['splitBy']] : NULL,
             $filter);
     }

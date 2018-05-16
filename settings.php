@@ -31,14 +31,17 @@ function fill_settings_page()
         }
     }
 ?>
-<div class="wrap" data-id=<?php echo $id ?> data-name=<?php echo $options['name'] ?>>
+<div class="wrap">
     <h1 class="wp-heading-inline">Jot Settings</h1>
     <p>Add an admin menu for a single data table or edit an existing menu.</p>
 
+<!-- Initial form -->
+<!-- Retrieves DB info from user -->
     <form class="generic-form" action="admin.php" method="get" accept-charset="utf-8">
         <input type="hidden" name="page" value="db-edit/settings.php"/>
         <table class="form-table">
             <tbody>
+<!-- Database Host -->
                 <tr class="form-field form-required">
                     <th>
                         <label for="db-host">
@@ -50,6 +53,7 @@ function fill_settings_page()
                         <input type="text" name="db-host" class="form-input" id="db-host" value="<?php echo $db_host ?>"/>
                     </td>
                 </tr>
+<!-- Database Name -->
                 <tr class="form-field form-required">
                     <th>
                         <label for="db-name">
@@ -61,6 +65,7 @@ function fill_settings_page()
                         <input type="text" name="db-name" class="form-input" id="db-name" value="<?php echo $db_name ?>"/>
                     </td>
                 </tr>
+<!-- Database Credentials -->
                 <tr class="form-field form-required">
                     <th>
                         <label for="db-user">
@@ -78,10 +83,11 @@ function fill_settings_page()
         <input type="submit" class="button button-primary" value="Update"/>
     </form>
 
+<!-- Establish link with database -->
+<!-- Abort on failure and display warning -->
 <?php
     if ($form_updated){
         try {
-            //$db = new PDO('mysql:host=crmtech.local;dbname=local', 'root', 'root');
             $db = new PDO('mysql:host='.$db_host.';dbname='.$db_name, $db_user, $db_pass);
         }
         catch (Exception $e) {
@@ -97,6 +103,8 @@ function fill_settings_page()
 
 ?>
 
+<!-- Form is displayed in DB info is valid -->
+<!-- Lists tables in database as select -->
     <form action="admin.php" method="get" accept-charset="utf-8">
 
         <input type="hidden" name="page" value="db-edit/settings.php"/>
@@ -107,6 +115,7 @@ function fill_settings_page()
 
         <table class="form-table">
             <tbody>
+<!-- Table Selection -->
             <tr>
                 <th>
                     <label for="table-select">Table Selection</label>
@@ -116,6 +125,7 @@ function fill_settings_page()
                     <select name="table-select" id="table-select">
                         <option selected value="-1">Select Table</option>
 
+<!-- Compile list of tables in database to Table Selection field -->
 <?php
         if (isset($_GET['table-select']) && $_GET['table-select']!=-1){
             $table_select = $_GET['table-select'];
@@ -149,9 +159,19 @@ function fill_settings_page()
 
         <?php if (isset($table_select)): ?>
 
-    <form class="ajax-form" action="<?php echo plugins_url('db-edit.php', __FILE__) ?>" method="post" accept-charset="utf-8">
+<!-- Form to be sent to server -->
+<!-- Contains all relevant info for menu creation -->
+    <form class="ajax-form" action="<?php echo plugins_url('settings-edit.php', __FILE__) ?>" method="post" accept-charset="utf-8">
+
+        <input type="hidden" name="db-host" value="<?php echo $db_host ?>"/>
+        <input type="hidden" name="db-name" value="<?php echo $db_name ?>"/>
+        <input type="hidden" name="db-user" value="<?php echo $db_user ?>"/>
+        <input type="hidden" name="db-pass" value="<?php echo $db_pass ?>"/>
+        <input type="hidden" name="table-select" value="<?php echo $table_select ?>"/>
+
         <table class="form-table">
             <tbody>
+<!-- Menu Title -->
             <tr class="form-field form-required">
                 <th>
                     <label for="menu-title">
@@ -163,6 +183,19 @@ function fill_settings_page()
                     <input type="text" name="menu-title" id="menu-title" class="form-input"/>
                 </td>
             </tr>
+<!-- Dashicon -->
+<tr class="form-field">
+                <th>
+                    <label for="icon">
+                        Dashicon<br>
+                        <a href="https://developer.wordpress.org/resource/dashicons/#menu" target="_blank">Find icons</a>
+                    </label>
+                </th>
+                <td>
+                    <input type="text" name="icon" id="icon" class="form-input" placeholder="dashicons-example-icon"/>
+                </td>
+            </tr>            
+<!-- Fields to Display -->
             <tr class="form-field">
                 <th>
                     <label>
@@ -171,6 +204,7 @@ function fill_settings_page()
                 </th>
                 <td>
 
+<!-- Compile list of tables in database to Fields to Display field -->
 <?php 
         $statement = $db->prepare("DESCRIBE `".$table_select."`");
         $statement->execute();
@@ -189,7 +223,8 @@ function fill_settings_page()
                     
                 </td>
             </tr>
-            <tr class="form-field form-required">
+<!-- Table ID Field -->
+            <tr class="form-field">
                 <th>
                     <label for="table-id">
                         Table ID Field
@@ -211,6 +246,7 @@ function fill_settings_page()
                     </select>
                 </td>
             </tr>
+<!-- Picture -->
             <tr class="form-field form-required">
                 <th>
                     <label for="image">
@@ -245,6 +281,7 @@ function fill_settings_page()
                     </select>
                 </td>
             </tr>
+<!-- Extra Options -->
             <tr class="form-field">
                 <th>
                     <label>
@@ -252,11 +289,11 @@ function fill_settings_page()
                     </label>
                 </th>
                 <td>
-                    <input type="checkbox" class="form-input" name="split" value="on"/>
+                    <input type="checkbox" class="form-input" name="split" id="split-checkbox" value="on"/>
                     <label>Display entries in separate tables based on </label>
 
 
-                    <select name="split-by" id="split-by-select">
+                    <select name="split-by" id="split-by-select" disabled>
 
         <?php foreach ($fields as $field) : ?>
 
@@ -270,11 +307,11 @@ function fill_settings_page()
                     </select>
                     <br>
 
-                    <input type="checkbox" class="form-input" name="order" value="on"/>
+                    <input type="checkbox" class="form-input" name="order" id="order-checkbox" value="on"/>
                     <label>Entries are numerically ordered by </label>
 
 
-                    <select name="order-by" id="order-by-select">
+                    <select name="order-by" id="order-by-select" disabled>
 
         <?php foreach ($fields as $field) : ?>
 

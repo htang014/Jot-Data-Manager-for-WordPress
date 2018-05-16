@@ -1,7 +1,7 @@
 <?php
 // HTML OBJECT GENERATORS
 
-function generate_table($options, $split_state=null, $filter=null){
+function generate_table($id, $options, $split_state=null, $filter=null){
     global $db;
     $colspan = count($options['displayColumns']) + 1;
     if ($options['order']) {
@@ -53,7 +53,7 @@ function generate_table($options, $split_state=null, $filter=null){
                     $values[$field] = $row[$field];
                 }
                 $imgsrc = $options['image'] ? $options['imageUrlRoot'] . $row[$options['imageSource']] : NULL; 
-                echo generate_table_item($options['name'], $row[$options['tableId']], $values, isset($filter) ? false : $options['order'], $imgsrc );
+                echo generate_table_item($id, $row[$options['tableId']], $values, isset($filter) ? false : $options['order'], $imgsrc );
 
             }
             if ($fetch_empty):

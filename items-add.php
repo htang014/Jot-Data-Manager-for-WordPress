@@ -12,9 +12,18 @@ function fill_add_page($id, $options)
     foreach ($options['displayColumns'] as $value) {
         assert(in_array($value, $db_fields));
     }
+
+    // Prevent automatically-managed fields from being edited
+    $edit_fields = array_diff($edit_fields, array($options['tableId']));
+    if ($options['image']){
+        $edit_fields = array_diff($edit_fields, array($options['imageSource']));
+    }
+    if ($options['order']){
+        $edit_fields = array_diff($edit_fields, array($options['orderBy']));
+    }
 ?>
 
-<div class="wrap" data-id="<?php echo $id ?>" data-name="<?php echo htmlspecialchars($options['name']) ?>">
+<div class="wrap" data-id="<?php echo $id ?>" data-name="<?php echo $id ?>">
     <h1 class="wp-heading-inline">Add New</h1>
     <p>Add a new entry to this table.</p>
     <form class="ajax-form" action="<?php echo plugins_url('db-edit.php', __FILE__) ?>" method="post" enctype="multipart/form-data" accept-charset="utf-8">

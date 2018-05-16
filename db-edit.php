@@ -9,6 +9,9 @@ if (isset($_POST['task']) && isset($_POST['menu-id'])){
     foreach ($_POST as &$p){
         $p = ms_escape_string($p);
     }
+    if (empty($_POST['menu-id'])){
+        $_POST['menu-id'] = 0;
+    }
 
     $ini = parse_ini_file("settings.ini",true);
     $options = $ini[$_POST['menu-id']];

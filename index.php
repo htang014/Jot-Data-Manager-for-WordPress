@@ -45,23 +45,23 @@ function init_menu() {
 		add_menu_page( $value['name'].' List',
 			$value['name'], 
 			'manage_options', 
-			'db-edit/'.$value['name'].'-list.php', 
+			'db-edit/'.$key.'-list.php', 
 			function() use ($key, $value) { fill_list_page($key, $value); }, 
 			$value['icon'], 
 			6  );
 
-        add_submenu_page( 'db-edit/'.$value['name'].'-list.php',
+        add_submenu_page( 'db-edit/'.$key.'-list.php',
             $value['name'].' Add',
 			'Add New', 
 			'manage_options', 
-			'db-edit/'.$value['name'].'-add.php',  
+			'db-edit/'.$key.'-add.php',  
             function() use ($key, $value) { fill_add_page($key, $value); } );
             
-        add_submenu_page( 'db-edit/'.$value['name'].'-list.php',
+        add_submenu_page( 'db-edit/'.$key.'-list.php',
             $value['name'].' Edit',
 			'Edit Existing', 
 			'manage_options', 
-			'db-edit/'.$value['name'].'-edit.php',  
+			'db-edit/'.$key.'-edit.php',  
 			function() use ($key, $value) { fill_edit_page($key, $value); } );
     }
 }
