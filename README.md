@@ -17,6 +17,14 @@ FEATURES:
 * Rearrange table entries or split entries into multiple tables
 
 SCREENSHOTS:
-<img src="https://i.imgur.com/ow5Nrwb.png"
+<img src="https://i.imgur.com/hVwzv1k.png"
      alt="Display Page"
+     style="float: left; margin-right: 10px;" />
+
+<img src="https://i.imgur.com/ow5Nrwb.png"
+     alt="Edit Entry Page"
+     style="float: left; margin-right: 10px;" />
+     
+<img src="https://i.imgur.com/WotPT4w.png"
+     alt="Settings Page"
      style="float: left; margin-right: 10px;" />
