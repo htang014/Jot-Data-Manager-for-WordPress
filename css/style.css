@@ -1,0 +1,36 @@
+.search-box {
+    position: absolute;
+    right: 20px;
+}
+
+.table-wrapper {
+    margin-bottom: 20px;
+}
+
+.table-label{
+    font-size: 1.3em;
+    margin: 0;
+    padding: 24.9px 12px;
+    background-color: #ffffff;
+    border: 1px solid #e5e5e5;
+    border-bottom: none;
+}
+
+.table-row-item img {
+    float: left;
+    margin-right: 10px;
+    height: 32px;
+    width: 32px;
+}
+
+.table-row-rearrange {
+    width: 70px;
+}
+
+.table-row-checkbox input {
+    margin: 0 0 0 8px !important;
+}
+
+.table-row-rearrange span {
+    cursor: pointer;
+}
