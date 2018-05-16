@@ -1,8 +1,8 @@
 <?php
 /*
-Plugin Name: DB Edit
-description: placeholder
-Version: 1.2
+Plugin Name: Jot Data Manager
+description: A non-technical interface for modifying MySQL tables
+Version: 0.2
 Author: Hans Tang
 Author URI: https://hanst.me
 License: GPL2
@@ -33,8 +33,8 @@ function init_scripts() {
 }
 
 function init_menu() {
-    add_options_page('DB Edit Settings',
-        'DB Edit', 
+    add_options_page('Jot Settings',
+        'Jot Settings', 
         'manage_options', 
         'db-edit/settings.php',  
         function() { fill_settings_page(); } );

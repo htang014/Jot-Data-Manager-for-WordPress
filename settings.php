@@ -32,8 +32,8 @@ function fill_settings_page()
     }
 ?>
 <div class="wrap" data-id=<?php echo $id ?> data-name=<?php echo $options['name'] ?>>
-    <h1 class="wp-heading-inline">DB Edit</h1>
-    <p>Add an admin menu for a single data table.</p>
+    <h1 class="wp-heading-inline">Jot Settings</h1>
+    <p>Add an admin menu for a single data table or edit an existing menu.</p>
 
     <form class="generic-form" action="admin.php" method="get" accept-charset="utf-8">
         <input type="hidden" name="page" value="db-edit/settings.php"/>
@@ -47,7 +47,7 @@ function fill_settings_page()
                         </label>
                     </th>
                     <td>
-                        <input type="text" name="db-host" class="form-input" value="<?php echo $db_host ?>"/>
+                        <input type="text" name="db-host" class="form-input" id="db-host" value="<?php echo $db_host ?>"/>
                     </td>
                 </tr>
                 <tr class="form-field form-required">
@@ -58,18 +58,18 @@ function fill_settings_page()
                         </label>
                     </th>
                     <td>
-                        <input type="text" name="db-name" class="form-input" value="<?php echo $db_name ?>"/>
+                        <input type="text" name="db-name" class="form-input" id="db-name" value="<?php echo $db_name ?>"/>
                     </td>
                 </tr>
                 <tr class="form-field form-required">
                     <th>
-                        <label for="db-name">
+                        <label for="db-user">
                             Database Credentials
                             <span class="description">(required)</span>
                         </label>
                     </th>
                     <td>
-                        <input type="text" name="db-user" class="form-input" placeholder="User" value="<?php echo $db_user ?>"/>
+                        <input type="text" name="db-user" class="form-input" id="db-user" placeholder="User" value="<?php echo $db_user ?>"/>
                         <input type="text" name="db-pass" class="form-input" placeholder="Password" value="<?php echo $db_pass ?>"/>
                     </td>
                 </tr>
@@ -160,7 +160,7 @@ function fill_settings_page()
                     </label>
                 </th>
                 <td>
-                    <input type="text" name="menu-title" class="form-input"/>
+                    <input type="text" name="menu-title" id="menu-title" class="form-input"/>
                 </td>
             </tr>
             <tr class="form-field">
@@ -197,7 +197,7 @@ function fill_settings_page()
                     </label>
                 </th>
                 <td>
-                    <select name="table-id" id="order-by-select">
+                    <select name="table-id" id="table-id">
 
         <?php foreach ($fields as $field) : ?>
 
@@ -218,17 +218,20 @@ function fill_settings_page()
                     </label>
                 </th>
                 <td>
-                    <input type="checkbox" class="form-input" name="image" value="on"/>
+                    <input type="checkbox" class="form-input" id="enable-picture-checkbox" name="image" value="on"/>
                     <label>For each entry, display a small image from the following directory:</label>
                     <br>
                     <br>
-                    <input type="text" name="img-url-root" class="form-input"/>
+                    <div class="inline-input-wrapper">
+                        <label for="img-url-root"><?php echo realpath($_SERVER['DOCUMENT_ROOT']) ?></label>
+                        <input type="text" name="img-url-root" class="form-input" id="picture-path-input" placeholder="/relative/path/from/root/" disabled/>
+                    </div>
                     <br>
                     <br>
                     <label>Names of image files for each entry are found in the following field:</label>
                     <br>
                     <br>
-                    <select name="imgsrc" id="order-by-select">
+                    <select name="imgsrc" id="image-field-select" disabled>
 
         <?php foreach ($fields as $field) : ?>
 

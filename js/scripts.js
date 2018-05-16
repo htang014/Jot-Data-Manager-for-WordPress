@@ -42,6 +42,18 @@ jQuery(document).ready(function($){
         }
     });
 
+    $('#enable-picture-checkbox').change(function () {
+        var $this = $(this);
+        if ($this.is(':checked')){
+            $('#picture-path-input').prop('disabled', false);
+            $('#image-field-select').prop('disabled', false);
+        }
+        else {
+            $('#picture-path-input').prop('disabled', true);
+            $('#image-field-select').prop('disabled', true);
+        }
+    });
+
     $('#table-entry-select').change(function () {
         var $this = $(this);
         var menuName = $(this).parents('.wrap').attr('data-name');

@@ -25,7 +25,7 @@ function fill_edit_page($id, $options){
             <tbody>
             <tr>
                 <th>
-                    Entry Selection
+                    <label for="table-entry-select">Entry Selection</label>
                 </th>
                 <td>
                     <select name="position" id="table-entry-select">
@@ -55,7 +55,7 @@ function fill_edit_page($id, $options){
 
             <tr>
                 <th>
-                    Image
+                    <label>Image</label>
                 </th>
                 <td>
                     <input type="checkbox" name="remove-image" class="form-input" id="remove-image-checkbox"/>
