@@ -4,12 +4,12 @@
 This plugin is a work in progress.
 ```
 
-PLEASE READ:<br/>
+PLEASE READ:<br/><br/>
 Data viewing and manipulation is fully functional, albiet probably buggy.
 However, all setup must be done directly in ini file as
 settings menu is currently incomplete.
 
-DESCRIPTION:<br/>
+DESCRIPTION:<br/><br/>
 Jaught allows non-technical WordPressadministrators to modify database
 tables in a manner similar to the User menu.
 
