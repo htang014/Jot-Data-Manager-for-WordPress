@@ -10,7 +10,7 @@ However, all setup must be done directly in ini file as
 settings menu is currently incomplete.</p>
 
 DESCRIPTION:<br/>
-<p>Jaught allows non-technical WordPressadministrators to modify database
+<p>Jaught allows non-technical WordPress administrators to modify database
 tables in a manner similar to the User menu.</p>
 
 FEATURES:<br/>
