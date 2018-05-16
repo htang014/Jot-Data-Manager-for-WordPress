@@ -40,6 +40,9 @@ if (isset($_POST['db-host']) &&
                 exit;
             }
         }
+        else {
+            $options['image'] = 0;
+        }
         if (isset($_POST['split'])){
             if (isset($_POST['split-by'])){
                 $options['split'] = 1;
@@ -51,6 +54,9 @@ if (isset($_POST['db-host']) &&
                 exit;
             }
         }
+        else {
+            $options['split'] = 0;
+        }
         if (isset($_POST['order'])){
             if (isset($_POST['order-by'])){
                 $options['order'] = 1;
@@ -61,6 +67,9 @@ if (isset($_POST['db-host']) &&
                 echo "Missing required order fields";
                 exit;
             }
+        }
+        else {
+            $options['order'] = 0;
         }
         if (isset($_POST['icon'])){
             $options['icon'] = $_POST['icon'];
