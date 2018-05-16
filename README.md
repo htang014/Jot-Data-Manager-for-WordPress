@@ -1,7 +1,7 @@
 # Jaught Data Manager
 
 ```diff
-- This plugin is a work in progress.
+This plugin is a work in progress.
 ```
 
 PLEASE READ: 
