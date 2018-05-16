@@ -4,7 +4,7 @@
 This plugin is a work in progress.
 ```
 
-PLEASE READ:<br/>
+NOTICE:<br/>
 <p>Data viewing and manipulation is fully functional, albiet probably buggy.
 However, all setup must be done directly in ini file as
 settings menu is currently incomplete.</p>
