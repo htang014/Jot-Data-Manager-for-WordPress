@@ -1,4 +1,4 @@
-# Jaught Data Manager
+# Jot Data Manager
 
 ```diff
 This plugin is a work in progress.
@@ -10,7 +10,7 @@ However, all setup must be done directly in ini file as
 settings menu is currently incomplete.</p>
 
 DESCRIPTION:<br/>
-<p>Jaught allows non-technical WordPress administrators to modify database
+<p>Jot allows non-technical WordPress administrators to modify database
 tables in a manner similar to the User menu.</p>
 
 FEATURES:<br/>
