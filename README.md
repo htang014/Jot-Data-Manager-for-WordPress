@@ -20,7 +20,7 @@ FEATURES:<br/>
 
 INSTALLATION:<br/>
 * Download project as zip
-* Place in your wp-content/plugins directory
+* Upload to WordPress project via the plugins menu
 
 SCREENSHOTS:<br/>
 <img src="https://i.imgur.com/hVwzv1k.png"
