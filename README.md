@@ -1,7 +1,7 @@
 
 <img src="https://i.imgur.com/E3D0T2A.png"
      alt="Display Page"
-     height="32"
+     height="128"
      style="float: left; margin-right: 10px;" />
 
 # Jot Data Manager
