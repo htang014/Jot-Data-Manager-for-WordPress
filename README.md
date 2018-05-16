@@ -2,7 +2,7 @@
 <img src="https://i.imgur.com/E3D0T2A.png"
      alt="Display Page"
      height="128"
-     style="float: left; margin-right: 10px;" />
+     style="float: left; margin-right: 10px; display: inline" />
 
 # Jot Data Manager
 
