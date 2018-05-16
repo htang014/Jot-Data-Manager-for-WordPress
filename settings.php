@@ -289,6 +289,7 @@ function fill_settings_page()
             </tr>
             </tbody>
         </table>
+        <input type="submit" class="button button-primary" value="Add Menu"/>
     </form>
 
 
