@@ -1,6 +1,8 @@
 # Jaught Data Manager
 
-<span style="color:red">This plugin is a work in progress.</span>
+```diff
+- This plugin is a work in progress.
+```
 
 PLEASE READ: 
 Data viewing and manipulation is fully functional, albiet probably buggy.
