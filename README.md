@@ -4,14 +4,14 @@
 This plugin is a work in progress.
 ```
 
-PLEASE READ:<br/><br/>
-Data viewing and manipulation is fully functional, albiet probably buggy.
+PLEASE READ:<br/>
+<p>Data viewing and manipulation is fully functional, albiet probably buggy.
 However, all setup must be done directly in ini file as
-settings menu is currently incomplete.
+settings menu is currently incomplete.</p>
 
-DESCRIPTION:<br/><br/>
-Jaught allows non-technical WordPressadministrators to modify database
-tables in a manner similar to the User menu.
+DESCRIPTION:<br/>
+<p>Jaught allows non-technical WordPressadministrators to modify database
+tables in a manner similar to the User menu.</p>
 
 FEATURES:<br/>
 * Create menus directly in the WordPress administration page to view and interact with tables.
