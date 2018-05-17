@@ -341,7 +341,7 @@ function fill_settings_page()
                         value="on" 
                         <?php echo $options['image'] ? "checked" : "" ?>
                     />
-                    <label>For each entry, display a small image from the following directory:</label>
+                    <label>Associate each entry with an image from the following directory:</label>
                     <br>
                     <br>
                     <div class="inline-input-wrapper">
@@ -358,7 +358,7 @@ function fill_settings_page()
                     </div>
                     <br>
                     <br>
-                    <label>Names of image files for each entry are found in the following field:</label>
+                    <label>Names of image files for each entry are found in the following table field:</label>
                     <br>
                     <br>
                     <select 
