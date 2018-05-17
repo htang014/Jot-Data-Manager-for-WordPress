@@ -4,6 +4,17 @@ require_once 'includes.php';
 function fill_settings_page()
 {
     $form_updated = false;
+    $ini = parse_ini_file("settings.ini",true);
+    $menu_key = $_GET['menu-select'];
+    $options = $ini[$menu_key];
+
+    if (isset($options)){
+        $_GET['db-host'] = $options['dbhost'];
+        $_GET['db-name'] = $options['dbname'];
+        $_GET['db-user'] = $options['dbuser'];
+        $_GET['db-pass'] = $options['dbpass'];
+        $_GET['table-select'] = $options['dataTable'];
+    }
 
     if (isset($_GET['db-host']) ||
         isset($_GET['db-name']) ||
@@ -32,16 +43,18 @@ function fill_settings_page()
     }
 ?>
 <div class="wrap">
+
     <h1 class="wp-heading-inline">Jot Settings</h1>
     <p>Add an admin menu for a single data table or edit an existing menu.</p>
 
 <!-- Initial form -->
-<!-- Retrieves DB info from user -->
-    <form class="generic-form" action="admin.php" method="get" accept-charset="utf-8">
+    <form action="admin.php" method="get" accept-charset="utf-8">
+
         <input type="hidden" name="page" value="db-edit/settings.php"/>
+
         <table class="form-table">
             <tbody>
-<!-- Menu Selection -->
+    <!-- Menu Selection -->
             <tr class="form-field">
                 <th>
                     <label for="menu-select">
@@ -51,10 +64,35 @@ function fill_settings_page()
                 <td>
                     <select name="menu-select" class="form-input" id="menu-select">
                         <option selected value="-1" label="Create New">
+
+    <?php foreach ($ini as $key=>$value): ?>
+
+                        <option
+                            <?php echo (isset($menu_key) && $menu_key==$key) ? "selected" : "" ?>
+                            value="<?php echo $key ?>"  
+                            label="<?php echo htmlspecialchars($value['name']) ?>"
+                        />
+
+    <?php endforeach ?>
+
                     </select>
                 </td>
             </tr>
-<!-- Database Host -->
+        </tbody>
+        </table>
+    </form>
+
+    <!-- Retrieves DB info from user -->
+    <form class="generic-form" action="admin.php" method="get" accept-charset="utf-8">
+        <input type="hidden" name="page" value="db-edit/settings.php"/>
+
+    <?php if (isset($options)): ?>
+        <input type="hidden" name="menu-select" value=<?php echo $menu_key ?>/>
+    <?php endif; ?>
+
+        <table class="form-table">
+            <tbody>
+    <!-- Database Host -->
                 <tr class="form-field form-required">
                     <th>
                         <label for="db-host">
@@ -66,7 +104,7 @@ function fill_settings_page()
                         <input type="text" name="db-host" class="form-input" id="db-host" value="<?php echo $db_host ?>"/>
                     </td>
                 </tr>
-<!-- Database Name -->
+    <!-- Database Name -->
                 <tr class="form-field form-required">
                     <th>
                         <label for="db-name">
@@ -78,7 +116,7 @@ function fill_settings_page()
                         <input type="text" name="db-name" class="form-input" id="db-name" value="<?php echo $db_name ?>"/>
                     </td>
                 </tr>
-<!-- Database Credentials -->
+    <!-- Database Credentials -->
                 <tr class="form-field form-required">
                     <th>
                         <label for="db-user">
@@ -96,8 +134,8 @@ function fill_settings_page()
         <input type="submit" class="button button-primary" value="Update"/>
     </form>
 
-<!-- Establish link with database -->
-<!-- Abort on failure and display warning -->
+    <!-- Establish link with database -->
+    <!-- Abort on failure and display warning -->
 <?php
     if ($form_updated){
         try {
@@ -116,8 +154,10 @@ function fill_settings_page()
 
 ?>
 
-<!-- Form is displayed in DB info is valid -->
-<!-- Lists tables in database as select -->
+
+
+    <!-- Form is displayed in DB info is valid -->
+    <!-- Lists tables in database as select -->
     <form action="admin.php" method="get" accept-charset="utf-8">
 
         <input type="hidden" name="page" value="db-edit/settings.php"/>
@@ -126,9 +166,14 @@ function fill_settings_page()
         <input type="hidden" name="db-user" value="<?php echo $db_user ?>"/>
         <input type="hidden" name="db-pass" value="<?php echo $db_pass ?>"/>
 
+    <?php if (isset($options)): ?>
+        <input type="hidden" name="menu-select" value="<?php echo $menu_key ?>"/>
+    <?php endif; ?>
+
         <table class="form-table">
             <tbody>
-<!-- Table Selection -->
+
+    <!-- Table Selection -->
             <tr>
                 <th>
                     <label for="table-select">Table Selection</label>
@@ -138,7 +183,7 @@ function fill_settings_page()
                     <select name="table-select" id="table-select">
                         <option selected value="-1">Select Table</option>
 
-<!-- Compile list of tables in database to Table Selection field -->
+    <!-- Compile list of tables in database to Table Selection field -->
 <?php
         if (isset($_GET['table-select']) && $_GET['table-select']!=-1){
             $table_select = $_GET['table-select'];
@@ -172,6 +217,8 @@ function fill_settings_page()
 
         <?php if (isset($table_select)): ?>
 
+
+
 <!-- Form to be sent to server -->
 <!-- Contains all relevant info for menu creation -->
     <form class="ajax-form" action="<?php echo plugins_url('settings-edit.php', __FILE__) ?>" method="post" accept-charset="utf-8">
@@ -182,9 +229,14 @@ function fill_settings_page()
         <input type="hidden" name="db-pass" value="<?php echo $db_pass ?>"/>
         <input type="hidden" name="table-select" value="<?php echo $table_select ?>"/>
 
+    <?php if (isset($options)): ?>
+        <input type="hidden" name="menu-select" value="<?php echo $menu_key ?>"/>
+    <?php endif; ?>
+
         <table class="form-table">
             <tbody>
-<!-- Menu Title -->
+
+    <!-- Menu Title -->
             <tr class="form-field form-required">
                 <th>
                     <label for="menu-title">
@@ -193,11 +245,12 @@ function fill_settings_page()
                     </label>
                 </th>
                 <td>
-                    <input type="text" name="menu-title" id="menu-title" class="form-input"/>
+                    <input type="text" name="menu-title" id="menu-title" class="form-input" value="<?php echo $options['name'] ?>"/>
                 </td>
             </tr>
-<!-- Dashicon -->
-<tr class="form-field">
+
+    <!-- Dashicon -->
+            <tr class="form-field">
                 <th>
                     <label for="icon">
                         Dashicon<br>
@@ -205,10 +258,11 @@ function fill_settings_page()
                     </label>
                 </th>
                 <td>
-                    <input type="text" name="icon" id="icon" class="form-input" placeholder="dashicons-example-icon"/>
+                    <input type="text" name="icon" id="icon" class="form-input" placeholder="dashicons-example-icon" value="<?php echo $options['icon'] ?>"/>
                 </td>
-            </tr>            
-<!-- Fields to Display -->
+            </tr>   
+
+    <!-- Fields to Display -->
             <tr class="form-field">
                 <th>
                     <label>
@@ -217,7 +271,7 @@ function fill_settings_page()
                 </th>
                 <td>
 
-<!-- Compile list of tables in database to Fields to Display field -->
+    <!-- Compile list of tables in database to Fields to Display field -->
 <?php 
         $statement = $db->prepare("DESCRIBE `".$table_select."`");
         $statement->execute();
@@ -226,7 +280,13 @@ function fill_settings_page()
         while ($row = $statement->fetch()) : 
 ?>
 
-                    <input type="checkbox" class="form-input" name="display-fields[]" value="<?php echo $row['Field'] ?>"/>
+                    <input
+                        type="checkbox" 
+                        class="form-input" 
+                        name="display-fields[]" 
+                        value="<?php echo $row['Field'] ?>" 
+                        <?php echo in_array($row['Field'],$options['displayColumns']) ? "checked" : "" ?>
+                    />
                     <label><?php echo $row['Field'] ?></label>
                     <br>
 <?php 
@@ -236,7 +296,8 @@ function fill_settings_page()
                     
                 </td>
             </tr>
-<!-- Table ID Field -->
+
+    <!-- Table ID Field -->
             <tr class="form-field">
                 <th>
                     <label for="table-id">
@@ -252,6 +313,7 @@ function fill_settings_page()
                         <option
                             value="<?php echo $field ?>"  
                             label="<?php echo $field ?>"
+                            <?php echo $options['tableId'] == $field ? "selected" : "" ?>
                         />
 
         <?php endforeach ?>
@@ -259,7 +321,8 @@ function fill_settings_page()
                     </select>
                 </td>
             </tr>
-<!-- Picture -->
+
+    <!-- Picture -->
             <tr class="form-field form-required">
                 <th>
                     <label for="image">
@@ -267,26 +330,46 @@ function fill_settings_page()
                     </label>
                 </th>
                 <td>
-                    <input type="checkbox" class="form-input" id="enable-picture-checkbox" name="image" value="on"/>
+                    <input 
+                        type="checkbox"
+                        class="form-input" 
+                        id="enable-picture-checkbox" 
+                        name="image" 
+                        value="on" 
+                        <?php echo $options['image'] ? "checked" : "" ?>
+                    />
                     <label>For each entry, display a small image from the following directory:</label>
                     <br>
                     <br>
                     <div class="inline-input-wrapper">
                         <label for="img-url-root"><?php echo realpath($_SERVER['DOCUMENT_ROOT']) ?></label>
-                        <input type="text" name="img-url-root" class="form-input" id="picture-path-input" placeholder="/relative/path/from/root/" disabled/>
+                        <input 
+                            type="text" 
+                            name="img-url-root" 
+                            class="form-input" 
+                            id="picture-path-input" 
+                            placeholder="/relative/path/from/root/"
+                            value="<?php echo $options['imageUrlRoot'] ?>" 
+                            <?php echo $options['image'] ? "" : "disabled" ?>
+                        />
                     </div>
                     <br>
                     <br>
                     <label>Names of image files for each entry are found in the following field:</label>
                     <br>
                     <br>
-                    <select name="imgsrc" id="image-field-select" disabled>
+                    <select 
+                        name="imgsrc" 
+                        id="image-field-select" 
+                        <?php echo $options['image'] ? "" : "disabled" ?>
+                    >
 
         <?php foreach ($fields as $field) : ?>
 
                         <option
                             value="<?php echo $field ?>"  
                             label="<?php echo $field ?>"
+                            <?php echo $options['imageSource'] == $field ? "selected" : "" ?>
                         />
 
         <?php endforeach ?>
@@ -294,7 +377,8 @@ function fill_settings_page()
                     </select>
                 </td>
             </tr>
-<!-- Extra Options -->
+
+    <!-- Extra Options -->
             <tr class="form-field">
                 <th>
                     <label>
@@ -302,17 +386,29 @@ function fill_settings_page()
                     </label>
                 </th>
                 <td>
-                    <input type="checkbox" class="form-input" name="split" id="split-checkbox" value="on"/>
+                    <input 
+                        type="checkbox" 
+                        class="form-input" 
+                        name="split" 
+                        id="split-checkbox" 
+                        value="on"
+                        <?php echo $options['split'] ? "checked" : "" ?>
+                    />
                     <label>Display entries in separate tables based on </label>
 
 
-                    <select name="split-by" id="split-by-select" disabled>
+                    <select 
+                        name="split-by" 
+                        id="split-by-select" 
+                        <?php echo $options['split'] ? "" : "disabled" ?>
+                    >
 
         <?php foreach ($fields as $field) : ?>
 
                         <option
                             value="<?php echo $field ?>"  
                             label="<?php echo $field ?>"
+                            <?php echo $options['splitBy'] == $field ? "selected" : "" ?>
                         />
 
         <?php endforeach ?>
@@ -320,17 +416,29 @@ function fill_settings_page()
                     </select>
                     <br>
 
-                    <input type="checkbox" class="form-input" name="order" id="order-checkbox" value="on"/>
+                    <input 
+                        type="checkbox"
+                        class="form-input" 
+                        name="order" 
+                        id="order-checkbox" 
+                        value="on"
+                        <?php echo $options['order'] ? "checked" : "" ?>
+                    />
                     <label>Entries are numerically ordered by </label>
 
 
-                    <select name="order-by" id="order-by-select" disabled>
+                    <select
+                        name="order-by" 
+                        id="order-by-select" 
+                        <?php echo $options['order'] ? "" : "disabled" ?>
+                    >
 
         <?php foreach ($fields as $field) : ?>
 
                         <option
                             value="<?php echo $field ?>"  
                             label="<?php echo $field ?>"
+                            <?php echo $options['orderBy'] == $field ? "selected" : "" ?>
                         />
 
         <?php endforeach ?>
@@ -342,8 +450,28 @@ function fill_settings_page()
             </tr>
             </tbody>
         </table>
-        <input type="submit" class="button button-primary" value="Add Menu"/>
+        <input 
+            type="submit" 
+            class="button button-primary" 
+            value="<?php echo (isset($menu_key) && $menu_key!=-1) ? "Save Changes" : "Add Menu" ?>"
+        />
     </form>
+
+
+
+    <?php if (isset($menu_key) && $menu_key!=-1): ?>
+    <br>
+<!-- Deletion Form -->
+    <form class="ajax-form" style="float:right" action="<?php echo plugins_url('settings-edit.php', __FILE__) ?>" method="post" accept-charset="utf-8">
+        <input type="hidden" name="delete" value="on"/>
+        <input type="hidden" name="menu-select" value="<?php echo $menu_key ?>"/>
+        <input 
+            type="submit" 
+            class="button button-secondary" 
+            value="Delete Menu"
+        />
+    </form>
+    <?php endif; ?>
 
 
 <?php

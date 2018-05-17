@@ -80,6 +80,10 @@ jQuery(document).ready(function($){
         window.location.href = "admin.php?page=db-edit%2F"+menuName+"-edit.php&position=" + $this.attr("value");
     });
 
+    $('#menu-select').change(function () {
+        $(this).parents('form').submit();
+    });
+
     $('#table-select').change(function () {
         $(this).parents('form').submit();
     });

@@ -4,6 +4,22 @@ require_once('includes.php');
 ?>
 
 <?php
+$ini = parse_ini_file("settings.ini",true);
+$options = array();
+
+if (isset($_POST['delete'])){
+    if (isset($_POST['menu-select']) && $_POST['menu-select'] >= 0){
+        unset($ini[$_POST['menu-select']]);
+        $ini = array_values($ini);
+        write_ini_file("settings.ini", $ini);
+    }
+    else {
+        header("HTTP/1.0 400 Bad Request");
+        echo "Invalid delete request";
+    }
+    exit;
+}
+
 if (isset($_POST['db-host']) &&
     isset($_POST['db-name']) &&
     isset($_POST['db-user']) &&
@@ -14,8 +30,10 @@ if (isset($_POST['db-host']) &&
         isset($_POST['display-fields']) &&
         isset($_POST['table-id'])) {
 
-        $ini = parse_ini_file("settings.ini",true);
-        $options = array();
+        if (isset($_POST['menu-select']) && $_POST['menu-select'] >= 0){
+            unset($ini[$_POST['menu-select']]);
+            $ini = array_values($ini);
+        }
 
         $options['dbhost'] = $_POST['db-host'];
         $options['dbname'] = $_POST['db-name'];
