@@ -13,7 +13,10 @@ function fill_settings_page()
         $_GET['db-name'] = $options['dbname'];
         $_GET['db-user'] = $options['dbuser'];
         $_GET['db-pass'] = $options['dbpass'];
-        $_GET['table-select'] = $options['dataTable'];
+
+        if (!isset($_GET['table-select'])){
+            $_GET['table-select'] = $options['dataTable'];
+        }
     }
 
     if (isset($_GET['db-host']) ||
@@ -87,7 +90,7 @@ function fill_settings_page()
         <input type="hidden" name="page" value="db-edit/settings.php"/>
 
     <?php if (isset($options)): ?>
-        <input type="hidden" name="menu-select" value=<?php echo $menu_key ?>/>
+        <input type="hidden" name="menu-select" value="<?php echo $menu_key ?>"/>
     <?php endif; ?>
 
         <table class="form-table">
