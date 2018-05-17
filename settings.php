@@ -41,6 +41,19 @@ function fill_settings_page()
         <input type="hidden" name="page" value="db-edit/settings.php"/>
         <table class="form-table">
             <tbody>
+<!-- Menu Selection -->
+            <tr class="form-field">
+                <th>
+                    <label for="menu-select">
+                        Select Menu
+                    </label>
+                </th>
+                <td>
+                    <select name="menu-select" class="form-input" id="menu-select">
+                        <option selected value="-1" label="Create New">
+                    </select>
+                </td>
+            </tr>
 <!-- Database Host -->
                 <tr class="form-field form-required">
                     <th>
