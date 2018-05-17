@@ -1,12 +1,11 @@
 <?php
 
-function fill_edit_page($id, $options){
-    global $db;
+function fill_edit_page($id, $options, &$db){
     if (isset($_GET['position'])){
         $init_pos = $_GET['position'];
     }
 
-    $db_fields = get_fields_from_table($options['dataTable']);
+    $db_fields = get_fields_from_table($options['dataTable'], $db);
     $edit_fields = $options['displayColumns'];
     if ($options['split']) {
         $edit_fields[] = $options['splitBy'];

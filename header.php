@@ -1,5 +1,5 @@
 <?php
-$db = new PDO('mysql:host=crmtech.local;dbname=local', 'root', 'root');
+//$db = new PDO('mysql:host=crmtech.local;dbname=local', 'root', 'root');
 
 $flg_success_status = FLAG_DEFAULT;
 $flg_post_status = FLAG_DEFAULT;

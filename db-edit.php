@@ -15,20 +15,9 @@ if (isset($_POST['task']) && isset($_POST['menu-id'])){
 
     $ini = parse_ini_file("settings.ini",true);
     $options = $ini[$_POST['menu-id']];
+    $db = new PDO('mysql:host='.$options['dbhost'].';dbname='.$options['dbname'], $options['dbuser'], $options['dbpass']);
 
-    if ( $_POST['task']=='image-clear' ){
-
-        if (!isset ($_POST['position'])){
-
-            $flg_post_status = FLAG_ERROR;
-            $flg_success_status = FLAG_ERROR;
-        }
-        else {
-            edit_team_db_image($_POST['position']);
-        }
-
-    }
-    elseif ( $_POST['task']=='row-edit' ){
+    if ( $_POST['task']=='row-edit' ){
 
         $flg_success_status = FLAG_SUCCESS;
 
@@ -47,12 +36,12 @@ if (isset($_POST['task']) && isset($_POST['menu-id'])){
         }
         else {
             if (isset($_POST['remove-image'])) {
-                edit_db_image($options, $_POST['position']);
+                edit_db_image($options, $_POST['position'], $db);
             }
             elseif (array_key_exists('image',$_FILES) && file_exists($_FILES['image']['tmp_name'])){
-                edit_db_image($options, $_POST['position'],$_FILES['image']);
+                edit_db_image($options, $_POST['position'], $db, $_FILES['image']);
             }
-            edit_db_entry($options, $_POST['position'], $fields);
+            edit_db_entry($options, $_POST['position'], $fields, $db);
         }
     }
     elseif ( $_POST['task']=='row-reorder' ){
@@ -64,7 +53,7 @@ if (isset($_POST['task']) && isset($_POST['menu-id'])){
             $flg_success_status = FLAG_ERROR;         
         }
         else {
-            move_db_entry( $options, $_POST['position'], $_POST['move'] );
+            move_db_entry( $options, $_POST['position'], $_POST['move'], $db);
         }
     }
     elseif ( $_POST['task']=='row-delete' ){
@@ -76,7 +65,7 @@ if (isset($_POST['task']) && isset($_POST['menu-id'])){
         }
         else {
             foreach((array) $_POST['position'] as $pos){
-                delete_db_entry($options, $pos);
+                delete_db_entry($options, $pos, $db);
             }
         }
     }
@@ -93,7 +82,7 @@ if (isset($_POST['task']) && isset($_POST['menu-id'])){
         }
 
         $image = (array_key_exists('image',$_FILES) && file_exists($_FILES['image']['tmp_name'])) ? $_FILES['image'] : NULL;
-        add_db_entry($options, $fields, $image );
+        add_db_entry($options, $fields, $db, $image);
     }
     else {
 

@@ -1,8 +1,7 @@
 <?php
-function fill_list_page($id, $options)
+function fill_list_page($id, $options, &$db)
 {
-    global $db;
-    $db_fields = get_fields_from_table($options['dataTable']);
+    $db_fields = get_fields_from_table($options['dataTable'], $db);
     $order_field = $options['order'] ? $options['orderBy'] : null;
     $image_field = $options['image'] ? $options['imageSource'] : null;
     $split_field = $options['split'] ? $options['splitBy'] : null;
@@ -51,7 +50,7 @@ function fill_list_page($id, $options)
     $statement->execute();
     $statement->setFetchMode(PDO::FETCH_ASSOC);
     while ($row = $statement->fetch()) {
-        echo generate_table($id, $options,
+        echo generate_table($id, $options, $db,
             $options['split'] ? $row[$options['splitBy']] : NULL,
             $filter);
     }

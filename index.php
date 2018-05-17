@@ -41,28 +41,29 @@ function init_menu() {
 
 
     $ini = parse_ini_file("settings.ini",true);
-	foreach ($ini as $key=>$value){
-		add_menu_page( $value['name'].' List',
-			$value['name'], 
+	foreach ($ini as $key=>$options){
+        $db = new PDO('mysql:host='.$options['dbhost'].';dbname='.$options['dbname'], $options['dbuser'], $options['dbpass']);
+		add_menu_page( $options['name'].' List',
+			$options['name'], 
 			'manage_options', 
 			'db-edit/'.$key.'-list.php', 
-			function() use ($key, $value) { fill_list_page($key, $value); }, 
-			$value['icon'], 
+			function() use ($key, $options, &$db) { fill_list_page($key, $options, $db); }, 
+			$options['icon'], 
 			6  );
 
         add_submenu_page( 'db-edit/'.$key.'-list.php',
-            $value['name'].' Add',
+            $options['name'].' Add',
 			'Add New', 
 			'manage_options', 
 			'db-edit/'.$key.'-add.php',  
-            function() use ($key, $value) { fill_add_page($key, $value); } );
+            function() use ($key, $options, &$db) { fill_add_page($key, $options, $db); } );
             
         add_submenu_page( 'db-edit/'.$key.'-list.php',
-            $value['name'].' Edit',
+            $options['name'].' Edit',
 			'Edit Existing', 
 			'manage_options', 
 			'db-edit/'.$key.'-edit.php',  
-			function() use ($key, $value) { fill_edit_page($key, $value); } );
+			function() use ($key, $options, &$db) { fill_edit_page($key, $options, $db); } );
     }
 }
 

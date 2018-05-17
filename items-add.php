@@ -1,9 +1,8 @@
 <?php
 
-function fill_add_page($id, $options)
+function fill_add_page($id, $options, &$db)
 {
-    global $db;
-    $db_fields = get_fields_from_table($options['dataTable']);
+    $db_fields = get_fields_from_table($options['dataTable'], $db);
     $edit_fields = $options['displayColumns'];
     if ($options['split']) {
         $edit_fields[] = $options['splitBy'];

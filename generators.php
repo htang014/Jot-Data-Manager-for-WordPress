@@ -1,8 +1,7 @@
 <?php
 // HTML OBJECT GENERATORS
 
-function generate_table($id, $options, $split_state=null, $filter=null){
-    global $db;
+function generate_table($id, $options, &$db, $split_state=null, $filter=null){
     $colspan = count($options['displayColumns']) + 1;
     if ($options['order']) {
         $colspan++;

@@ -110,9 +110,7 @@ function parse_title($title, $max_count=null){
     }
 }
 
-function get_fields_from_table($table){
-    global $db;
-
+function get_fields_from_table($table, $db){
     $fields = array();
     $statement = $db->prepare("DESCRIBE `".$table."`");
     $statement->execute();
@@ -178,8 +176,7 @@ function delete_image($path, $file){
 }
 
 // DB Editing Functions
-function add_db_entry($options, $fields, $image=null){
-    global $db;
+function add_db_entry($options, $fields, &$db, $image=null){
 
     $table = $options['dataTable'];
     $order_field = $options['order'] ? $options['orderBy'] : NULL;
@@ -228,8 +225,8 @@ function add_db_entry($options, $fields, $image=null){
     $statement->execute();
 }
 
-function edit_db_entry($options, $pos, $fields){
-    global $db;
+function edit_db_entry($options, $pos, $fields, &$db){
+
     $table = $options['dataTable'];
     $table_id = $options['tableId'];
 
@@ -272,7 +269,7 @@ function edit_db_entry($options, $pos, $fields){
     }
 }
 
-function move_db_entry($options, $pos, $move){
+function move_db_entry($options, $pos, $move, &$db){
     global $db;
     $order;
 
@@ -298,7 +295,7 @@ function move_db_entry($options, $pos, $move){
     $statement->execute();
 }
 
-function delete_db_entry($options ,$pos){
+function delete_db_entry($options ,$pos, &$db){
     global $db;
     $table = $options['dataTable'];
     $table_id = $options['tableId'];
@@ -335,8 +332,7 @@ function delete_db_entry($options ,$pos){
     }
 }
 
-function edit_db_image($options, $pos, $image=null){
-    global $db;
+function edit_db_image($options, $pos, &$db, $image=null){
 
     $statement = $db->prepare("SELECT * FROM `".$options['dataTable']."` WHERE `".$options['tableId']."`=".$pos);
     $statement->execute();
