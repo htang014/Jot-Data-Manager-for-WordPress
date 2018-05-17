@@ -177,7 +177,6 @@ function delete_image($path, $file){
 
 // DB Editing Functions
 function add_db_entry($options, $fields, &$db, $image=null){
-
     $table = $options['dataTable'];
     $order_field = $options['order'] ? $options['orderBy'] : NULL;
     $image_field = $options['image'] ? $options['imageSource'] : NULL;
@@ -226,7 +225,6 @@ function add_db_entry($options, $fields, &$db, $image=null){
 }
 
 function edit_db_entry($options, $pos, $fields, &$db){
-
     $table = $options['dataTable'];
     $table_id = $options['tableId'];
 
@@ -243,6 +241,10 @@ function edit_db_entry($options, $pos, $fields, &$db){
             $curr_order = $row[$order_field];
         }
 
+        if (empty($fields[$split_field])){
+            $fields[$split_field] = 0;
+        }
+        
         if ( $curr_split != $fields[$split_field] ){
             $statement=$db->prepare("SELECT * FROM `".$table."` WHERE `".$split_field."`='".$fields[$split_field]."' ORDER BY `".$order_field."` DESC LIMIT 1");
             $statement->execute();
@@ -270,7 +272,6 @@ function edit_db_entry($options, $pos, $fields, &$db){
 }
 
 function move_db_entry($options, $pos, $move, &$db){
-    global $db;
     $order;
 
     $table = $options['dataTable'];
@@ -289,14 +290,19 @@ function move_db_entry($options, $pos, $move, &$db){
 
     $new_order = ($move=='up') ? $order-1 : $order+1;
 
-    $statement = $db->prepare("UPDATE `".$table."` AS a JOIN `".$table."` AS b ".
+    $sql_str = "UPDATE `".$table."` AS a JOIN `".$table."` AS b ".
     "SET a.`".$order_field."`=".$new_order.", b.`".$order_field."`=".$order." ".
-    "WHERE a.`".$table_id."`=".$pos." and b.`".$order_field."`=".$new_order." and b.`".$split_field."`='".$split_value."'");
+    "WHERE a.`".$table_id."`=".$pos." and b.`".$order_field."`=".$new_order;
+
+    if ($options['split']){
+        $sql_str .= " and b.`".$split_field."`='".$split_value."'";
+    }
+
+    $statement = $db->prepare($sql_str);
     $statement->execute();
 }
 
 function delete_db_entry($options ,$pos, &$db){
-    global $db;
     $table = $options['dataTable'];
     $table_id = $options['tableId'];
     $order_field = $options['order'] ? $options['orderBy'] : NULL;
@@ -333,7 +339,6 @@ function delete_db_entry($options ,$pos, &$db){
 }
 
 function edit_db_image($options, $pos, &$db, $image=null){
-
     $statement = $db->prepare("SELECT * FROM `".$options['dataTable']."` WHERE `".$options['tableId']."`=".$pos);
     $statement->execute();
     $statement->setFetchMode(PDO::FETCH_ASSOC);
