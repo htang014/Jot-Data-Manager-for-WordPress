@@ -1,6 +1,6 @@
 
 <img src="https://i.imgur.com/E3D0T2A.png"
-     alt="Display Page"
+     alt="icon"
      height="128"
      style="float: left; margin-right: 10px;" />
      
@@ -28,14 +28,22 @@ tables with a lightweight, user-friendly interface.</p>
 * Upload to WordPress project via the plugins menu
 
 ## SCREENSHOTS:
-<img src="https://i.imgur.com/hVwzv1k.png"
+<img src="https://i.imgur.com/PiYq2sW.png"
      alt="Display Page"
      style="float: left; margin-right: 10px;" />
 
-<img src="https://i.imgur.com/ow5Nrwb.png"
+<img src="https://i.imgur.com/CLpzucS.png"
+     alt="Display Page 2"
+     style="float: left; margin-right: 10px;" />
+
+<img src="https://i.imgur.com/mIuDTfL.png"
      alt="Edit Entry Page"
      style="float: left; margin-right: 10px;" />
      
-<img src="https://i.imgur.com/WotPT4w.png"
+<img src="https://i.imgur.com/nFTwktu.png"
+     alt="Add Entry Page"
+     style="float: left; margin-right: 10px;" />
+     
+<img src="https://i.imgur.com/75Z7ngI.png"
      alt="Settings Page"
      style="float: left; margin-right: 10px;" />
