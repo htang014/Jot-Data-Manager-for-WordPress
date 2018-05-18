@@ -49,7 +49,7 @@ tables with a lightweight, user-friendly interface.</p>
 * Tables you wish to associate with images must have a dedicated image source column (ex. `imgsrc`)
      * The image source column will contain the image FILENAME
      * The image directory will be defined during setup
-     * To use your own default image (used when no association is made), 
+* To use your own default image (used when no association is made), 
        simply add a "blank-profile-picture.jpg" to your image directory
 
 ## Screenshots:
