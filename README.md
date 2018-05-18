@@ -25,7 +25,7 @@ tables with a lightweight, user-friendly interface.</p>
 ### Installation
 * Download project as zip
 * Upload to WordPress project via the plugins menu
-* Activate plugin via the Plugins menu
+* Activate plugin
 
 ### Usage
 #### Creating a menu
