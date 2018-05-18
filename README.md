@@ -17,8 +17,9 @@ Currently supports MySQL only.
 tables with a lightweight, user-friendly interface.</p>
 
 ### Features
-* Create menus directly in the WordPress administration page to view and interact with tables.
-* Display a small picture for each entry in the table
+* Create menus directly in the WordPress administration page to view and interact with tables
+* Quickly add and edit single entries to the data table
+* Associate table entries with images, which are uploaded and managed using the Jot interface
 * Rearrange table entries or split entries into multiple tables
 
 ### Installation
@@ -43,6 +44,13 @@ tables with a lightweight, user-friendly interface.</p>
 * To delete a menu, navigate to the "Settings">"Jot Settings"
 * Choose a menu to edit under "Menu Selection"
 * Click "Delete Menu" at the bottom of the page
+
+#### Regarding image association
+* Tables you wish to associate with images must have a dedicated image source column (ex. `imgsrc`)
+     * The image source column will contain the image FILENAME
+     * The image directory will be defined during setup
+     * To use your own default image (used when no association is made), 
+       simply add a "blank-profile-picture.jpg" to your image directory
 
 ## Screenshots:
 <img src="https://i.imgur.com/PiYq2sW.png"
