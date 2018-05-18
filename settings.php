@@ -288,7 +288,11 @@ function fill_settings_page()
                         class="form-input" 
                         name="display-fields[]" 
                         value="<?php echo $row['Field'] ?>" 
-                        <?php echo in_array($row['Field'],$options['displayColumns']) ? "checked" : "" ?>
+                        <?php
+				            if (isset($options['displayColumns'])){
+                        		echo in_array($row['Field'],$options['displayColumns']) ? "checked" : "" ;
+                        	}
+                        ?>
                     />
                     <label><?php echo $row['Field'] ?></label>
                     <br>
