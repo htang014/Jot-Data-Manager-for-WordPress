@@ -7,27 +7,44 @@
 # Jot Data Manager
 
 ```diff
-This plugin is a work in progress.
+This plugin is in alpha.
 Currently supports MySQL only.
 ```
+## Information
 
-## NOTICE:
-<p>Plugin should be fully functional, albiet probably buggy.</p>
-
-## DESCRIPTION:
+### Description
 <p>Jot allows non-technical WordPress administrators to modify MySQL
 tables with a lightweight, user-friendly interface.</p>
 
-## FEATURES:
+### Features
 * Create menus directly in the WordPress administration page to view and interact with tables.
 * Display a small picture for each entry in the table
 * Rearrange table entries or split entries into multiple tables
 
-## INSTALLATION:
+### Installation
 * Download project as zip
 * Upload to WordPress project via the plugins menu
+* Activate plugin via the Plugins menu
 
-## SCREENSHOTS:
+### Usage
+#### Creating a menu
+* To create a menu, navigate to the "Settings">"Jot Settings"
+* Ensure "Create New" is selected under "Menu Selection"
+* Fill in your database information and click Update
+* Choose the table that you want to create a menu for
+* Fill in the remaining form and click "Add New"
+
+#### Modifying a menu
+* To edit a menu, navigate to the "Settings">"Jot Settings"
+* Choose a menu to edit under "Menu Selection"
+* Modify the settings to your liking and click "Save Changes" at the bottom of the page
+
+#### Deleting a menu
+* To delete a menu, navigate to the "Settings">"Jot Settings"
+* Choose a menu to edit under "Menu Selection"
+* Click "Delete Menu" at the bottom of the page
+
+## Screenshots:
 <img src="https://i.imgur.com/PiYq2sW.png"
      alt="Display Page"
      style="float: left; margin-right: 10px;" />
