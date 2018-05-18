@@ -300,6 +300,31 @@ function fill_settings_page()
                 </td>
             </tr>
 
+    <!-- Primary Display Field -->
+            <tr class="form-field">
+                <th>
+                    <label for="primary-field">
+                        Primary Display Field
+                        <span class="description">(required)</span>
+                    </label>
+                </th>
+                <td>
+                    <select name="primary-field" id="primary-field">
+
+        <?php foreach ($fields as $field) : ?>
+
+                        <option
+                            value="<?php echo $field ?>"  
+                            label="<?php echo $field ?>"
+                            <?php echo $options['displayColumns'][0] == $field ? "selected" : "" ?>
+                        />
+
+        <?php endforeach ?>
+
+                    </select>
+                </td>
+            </tr>
+
     <!-- Table ID Field -->
             <tr class="form-field">
                 <th>

@@ -8,6 +8,9 @@ $ini = parse_ini_file("settings.ini",true);
 $options = array();
 
 if (isset($_POST['delete'])){
+    foreach ($_POST as &$p){
+        $p = ms_escape_string($p);
+    }
     if (isset($_POST['menu-select']) && $_POST['menu-select'] >= 0){
         unset($ini[$_POST['menu-select']]);
         $ini = array_values($ini);
@@ -41,12 +44,23 @@ if (isset($_POST['db-host']) &&
         $options['dbpass'] = $_POST['db-pass'];
         $options['dataTable'] = $_POST['table-select'];
         $options['name'] = $_POST['menu-title'];
-        $options['displayColumns'] = $_POST['display-fields'];
+
+        $_POST['display-fields'] = array_diff($_POST['display-fields'], array($_POST['primary-field']));
+
+        $options['displayColumns'] = array_merge(array($_POST['primary-field']),$_POST['display-fields']);
         $options['tableId'] = $_POST['table-id'];
 
         if (isset($_POST['image'])){
             if (isset($_POST['img-url-root']) &&
                 isset($_POST['imgsrc'])) {
+                
+                $_POST['img-url-root'] = str_replace("\\", "/", $_POST['img-url-root']);
+                if (substr($_POST['img-url-root'], -1) != "/"){
+                    $_POST['img-url-root'] = $_POST['img-url-root']."/";
+                }
+                if ($_POST['img-url-root'][0] != "/"){
+                    $_POST['img-url-root'] = "/".$_POST['img-url-root'];
+                }
 
                 $options['image'] = 1;
                 $options['imageUrlRoot'] = $_POST['img-url-root'];
