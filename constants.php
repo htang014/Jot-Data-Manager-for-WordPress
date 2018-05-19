@@ -1,5 +1,4 @@
 <?php
-define('TEAM_DB', 'team-members');
 define('DEFAULT_PROFILE_IMAGE', 'blank-profile-picture.jpg');
 define('MAX_IMAGE_SIZE', 4000000);  //4MB
 

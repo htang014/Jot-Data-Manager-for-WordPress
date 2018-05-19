@@ -1,9 +1,9 @@
 <?php
 require_once('includes.php');
-//require_once($_SERVER['DOCUMENT_ROOT']."/wp-load.php");
-?>
+require_once($_SERVER['DOCUMENT_ROOT']."/wp-load.php");
 
-<?php
+$flg_success_status = FLAG_SUCCESS;
+
 $ini = parse_ini_file("settings.ini",true);
 $options = array();
 
