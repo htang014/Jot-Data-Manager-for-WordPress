@@ -4,7 +4,7 @@ require_once($_SERVER['DOCUMENT_ROOT']."/wp-load.php");
 
 $flg_success_status = FLAG_SUCCESS;
 
-if (isset($task) && isset($_POST['menu-id'])){
+if (isset($_POST['task']) && isset($_POST['menu-id'])){
     // Escape all $_POST again just in case
     foreach ($_POST as &$p){
         $p = ms_escape_string($p);
@@ -15,10 +15,10 @@ if (isset($task) && isset($_POST['menu-id'])){
 
     //  Input sanitation
     $task = sanitize_text_field($_POST['task']);
-    $menu_id = (int) $_POST['menu-id'];
+    $menu_id = intval($_POST['menu-id']);
 
     $ini = parse_ini_file("settings.ini",true);
-    $options = $ini[$_POST['menu-id']];
+    $options = $ini[$menu_id];
     $db = new PDO('mysql:host='.$options['dbhost'].';dbname='.$options['dbname'], $options['dbuser'], $options['dbpass']);
 
     if ( $task=='row-edit' ){
@@ -32,7 +32,7 @@ if (isset($task) && isset($_POST['menu-id'])){
         }
 
         if (isset($_POST['position'])){
-            $pos = (int) $_POST['position'];
+            $pos = intval($_POST['position']);
 
             if (isset($_POST['remove-image'])) {
                 edit_db_image($options, $pos, $db);
@@ -54,7 +54,7 @@ if (isset($task) && isset($_POST['menu-id'])){
             isset($_POST['position'])){
 
             $move = sanitize_text_field($_POST['move']);
-            $pos = (int) $_POST['position'];
+            $pos = intval($_POST['position']);
 
             move_db_entry( $options, $pos, $move, $db);
         }
@@ -68,7 +68,7 @@ if (isset($task) && isset($_POST['menu-id'])){
         if (isset($_POST['position'])){
             $pos = (array) $_POST['position'];
             foreach($pos as &$p){
-                $p = (int) $p;
+                $p = intval($p);
                 delete_db_entry($options, $p, $db);
             }
  
