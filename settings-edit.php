@@ -21,6 +21,7 @@ if (isset($_POST['delete'])){
         if ($menu_id < 0){
             $flg_post_status = FLAG_ERROR;
             $flg_success_status = FLAG_ERROR;
+            goto err;
         }
 
         unset($ini[$menu_id]);
@@ -30,6 +31,7 @@ if (isset($_POST['delete'])){
     else {
         $flg_post_status = FLAG_ERROR;
         $flg_success_status = FLAG_ERROR;
+        goto err;
     }
 }
 else if (isset($_POST['db-host']) &&
@@ -166,11 +168,13 @@ else if (isset($_POST['db-host']) &&
     else {
         $flg_post_status = FLAG_ERROR;
         $flg_success_status = FLAG_ERROR;
+        goto err;
     }
 }
 else {
     $flg_post_status = FLAG_ERROR;
     $flg_success_status = FLAG_ERROR;
+    goto err;
 }
 
 err:
