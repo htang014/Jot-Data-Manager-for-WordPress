@@ -11,7 +11,7 @@ function fill_list_page($id, $options, &$db)
     }
     ?>
     
-    <div class="wrap" data-id="<?php echo $id ?>" data-name="<?php echo $id ?>">
+    <div class="wrap" data-id="<?php echo esc_attr($id) ?>" data-name="<?php echo esc_attr($id) ?>">
 
 	<?php
     foreach ($options['displayColumns'] as $value) {
@@ -19,26 +19,26 @@ function fill_list_page($id, $options, &$db)
     }
     ?>
 
-<h1 class="wp-heading-inline"><?php echo $options['name'] ?></h1>
-<a href=<?php menu_page_url('db-edit/' . $id . '-add.php')?> class="page-title-action">Add New</a>
+<h1 class="wp-heading-inline"><?php echo esc_html($options['name']) ?></h1>
+<a href=<?php esc_url(menu_page_url('db-edit/' . $id . '-add.php'))?> class="page-title-action">Add New</a>
 
 
-<form action="<?php echo "admin.php" ?>" method="get" >
+<form action="admin.php" method="get" >
     <p class="search-box">
-        <input type="hidden" name="page" value="<?php echo "db-edit/".$id."-list.php" ?>"/>
+        <input type="hidden" name="page" value="<?php echo esc_attr("db-edit/".$id."-list.php") ?>"/>
         <input type="search" name="filter"/>
-        <input class="button-secondary" type="submit" value="Search"/>
+        <input class="button-secondary" type="submit" value="<?php esc_attr('Search');?>"/>
     </p>
 </form>
 
-<form class="ajax-form" action="<?php echo plugins_url('db-edit.php', __FILE__) ?>" method="post" >
+<form class="ajax-form" action="<?php echo esc_url(plugins_url('db-edit.php', __FILE__)) ?>" method="post" >
     <div class="tablenav top">
         <select name="task">
             <option selected value="-1">Bulk Actions</option>
             <option value="row-delete">Delete</option>
         </select>
-        <input type="hidden" name="menu-id" value="<?php echo $id ?>"/>
-        <input class="button-secondary" type="submit" value="<?php esc_attr_e('Apply');?>" />
+        <input type="hidden" name="menu-id" value="<?php echo esc_attr($id) ?>"/>
+        <input class="button-secondary" type="submit" value="Apply" />
     </div>
 
 	<?php

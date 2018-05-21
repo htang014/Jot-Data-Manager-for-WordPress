@@ -12,11 +12,11 @@ function generate_table($id, $options, &$db, $split_state=null, $filter=null){
 
     <?php if ( $options['split'] ): ?>
 
-        <h2 class="table-label"><?php echo $options['splitBy']."=".$split_state ?></h2>
+        <h2 class="table-label"><?php echo esc_html($options['splitBy']."=".$split_state) ?></h2>
 
     <?php endif; ?>
 
-        <table class="widefat fixed striped" style=<?php echo $options['split'] ? '""' : '"border-top: none"' ?> >
+        <table class="widefat fixed striped" style="<?php echo $options['split'] ? esc_attr('') : esc_attr('border-top: none') ?>" >
             <thead>
                 <?php 
                 echo generate_table_header($options['displayColumns'], isset($filter) ? false : $options['order']);
@@ -58,7 +58,7 @@ function generate_table($id, $options, &$db, $split_state=null, $filter=null){
             if ($fetch_empty):
             ?>
             <tr class="table-row no-items">
-                <td class="colspanchange" colspan=<?php echo $colspan ?>>
+                <td class="colspanchange" colspan=<?php echo esc_attr($colspan) ?>>
                     No entries found.
                 </td>
             </tr>
@@ -84,28 +84,28 @@ function generate_table_item($menu_name, $pos, $values, $order, $imgsrc=NULL)
 ?>
     <tr data-pos=<?php echo $pos ?>>
         <th class="check-column table-row-item">
-            <input type="checkbox" class="administrator" name="position[]" value="<?php echo $pos ?>"/>
+            <input type="checkbox" class="administrator" name="position[]" value="<?php echo esc_attr($pos) ?>"/>
         </th>
         <?php
         reset($values);
         $first = key($values);
         foreach ($values as $key => $value): 
         ?>
-        <td class=<?php echo 'table-row-item table-row-'.$key ?>>
+        <td class=<?php echo esc_attr('table-row-item table-row-'.$key) ?>>
             <?php
             if ( $key === $first ):
                 if ( isset( $imgsrc ) ):
             ?>
-                <img src="<?php echo file_exists($_SERVER['DOCUMENT_ROOT'] . $imgsrc) ? $imgsrc : plugins_url('img/blank-profile-picture.jpg', __FILE__) ?>" />
+                <img src="<?php echo file_exists($_SERVER['DOCUMENT_ROOT'] . $imgsrc) ? esc_url($imgsrc) : esc_url(plugins_url('img/blank-profile-picture.jpg', __FILE__)) ?>" />
             <?php
                 endif;
             ?>
             <strong>
-                <a href="<?php echo "admin.php?page=db-edit%2F".$menu_name."-edit.php&position=".$pos ?>"><?php echo $value ?></a>
+                <a href="<?php echo esc_url("admin.php?page=db-edit%2F".$menu_name."-edit.php&position=".$pos) ?>"><?php echo esc_html($value) ?></a>
             </strong>
             <?php
             else:
-                echo $value;
+                echo esc_html($value);
             endif;
             ?>
         </td>
@@ -138,7 +138,7 @@ function generate_table_header($fields, $order){
         <?php
         foreach ($fields as $field): 
         ?>
-            <th class="row-title"><?php echo ($order?'':'<a>').ucwords( $field ).($order?'':'</a>') ?></th>
+            <th class="row-title"><?php echo esc_html(($order?'':'<a>').ucwords( $field ).($order?'':'</a>')) ?></th>
         <?php 
         endforeach;
 

@@ -1,5 +1,9 @@
 <?php
-//if (!defined('ABSPATH')) exit;
+// if (!defined('ABSPATH')) {
+//     header('HTTP/1.0 403 Forbidden');
+//     echo 'Direct access not permitted.';
+//     exit;
+// }
 
 $flg_success_status = FLAG_DEFAULT;
 $flg_post_status = FLAG_DEFAULT;

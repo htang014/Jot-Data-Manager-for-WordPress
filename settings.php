@@ -3,23 +3,24 @@ require_once 'includes.php';
 
 function fill_settings_page()
 {
-    $form_updated = false;
+    //STAGE 1
+    $form_stage = 0;
     $ini = parse_ini_file("settings.ini",true);
     $menu_key = $_GET['menu-select'];
     $options = $ini[$menu_key];
 
     if (isset($options)){
-        $_GET['db-host'] = $options['dbhost'];
-        $_GET['db-name'] = $options['dbname'];
-        $_GET['db-user'] = $options['dbuser'];
-        $_GET['db-pass'] = $options['dbpass'];
+        $db_host = $options['dbhost'];
+        $db_name = $options['dbname'];
+        $db_user = $options['dbuser'];
+        $db_pass = $options['dbpass'];
 
         if (!isset($_GET['table-select'])){
-            $_GET['table-select'] = $options['dataTable'];
+            $table_select = $options['dataTable'];
         }
+        $form_stage++;
     }
-
-    if (isset($_GET['db-host']) ||
+    elseif (isset($_GET['db-host']) ||
         isset($_GET['db-name']) ||
         isset($_GET['db-user']) ||
         isset($_GET['db-pass']) ){
@@ -37,11 +38,12 @@ function fill_settings_page()
 <?php
         }
         else {
-            $db_host = $_GET['db-host'];
-            $db_name = $_GET['db-name'];
-            $db_user = $_GET['db-user'];
-            $db_pass = $_GET['db-pass'];
-            $form_updated = true;
+            $db_host = sanitize_text_field($_GET['db-host']);
+            $db_name = sanitize_text_field($_GET['db-name']);
+            $db_user = sanitize_text_field($_GET['db-user']);
+            $db_pass = sanitize_text_field($_GET['db-pass']);
+
+            $form_stage++;
         }
     }
 ?>
@@ -72,8 +74,8 @@ function fill_settings_page()
 
                         <option
                             <?php echo (isset($menu_key) && $menu_key==$key) ? "selected" : "" ?>
-                            value="<?php echo $key ?>"  
-                            label="<?php echo htmlspecialchars($value['name']) ?>"
+                            value="<?php echo esc_attr($key) ?>"  
+                            label="<?php echo esc_attr($value['name']) ?>"
                         />
 
     <?php endforeach ?>
@@ -90,7 +92,7 @@ function fill_settings_page()
         <input type="hidden" name="page" value="db-edit/settings.php"/>
 
     <?php if (isset($options)): ?>
-        <input type="hidden" name="menu-select" value="<?php echo $menu_key ?>"/>
+        <input type="hidden" name="menu-select" value="<?php echo esc_attr($menu_key) ?>"/>
     <?php endif; ?>
 
         <table class="form-table">
@@ -104,7 +106,7 @@ function fill_settings_page()
                         </label>
                     </th>
                     <td>
-                        <input type="text" name="db-host" class="form-input" id="db-host" value="<?php echo $db_host ?>"/>
+                        <input type="text" name="db-host" class="form-input" id="db-host" value="<?php echo esc_attr($db_host) ?>"/>
                     </td>
                 </tr>
     <!-- Database Name -->
@@ -116,7 +118,7 @@ function fill_settings_page()
                         </label>
                     </th>
                     <td>
-                        <input type="text" name="db-name" class="form-input" id="db-name" value="<?php echo $db_name ?>"/>
+                        <input type="text" name="db-name" class="form-input" id="db-name" value="<?php echo esc_attr($db_name) ?>"/>
                     </td>
                 </tr>
     <!-- Database Credentials -->
@@ -128,8 +130,8 @@ function fill_settings_page()
                         </label>
                     </th>
                     <td>
-                        <input type="text" name="db-user" class="form-input" id="db-user" placeholder="User" value="<?php echo $db_user ?>"/>
-                        <input type="text" name="db-pass" class="form-input" placeholder="Password" value="<?php echo $db_pass ?>"/>
+                        <input type="text" name="db-user" class="form-input" id="db-user" placeholder="User" value="<?php echo esc_attr($db_user) ?>"/>
+                        <input type="text" name="db-pass" class="form-input" placeholder="Password" value="<?php echo esc_attr($db_pass) ?>"/>
                     </td>
                 </tr>
             </tbody>
@@ -140,11 +142,15 @@ function fill_settings_page()
     <!-- Establish link with database -->
     <!-- Abort on failure and display warning -->
 <?php
-    if ($form_updated){
-        try {
-            $db = new PDO('mysql:host='.$db_host.';dbname='.$db_name, $db_user, $db_pass);
-        }
-        catch (Exception $e) {
+    //STAGE 2
+    if (!($form_stage >= 1)){
+        return;
+    }
+
+    try {
+        $db = new PDO('mysql:host='.$db_host.';dbname='.$db_name, $db_user, $db_pass);
+    }
+    catch (Exception $e) {
 ?>
 
     <div class="notice notice-error">
@@ -152,25 +158,23 @@ function fill_settings_page()
     </div>
 
 <?php
-            return;
-        }
+        return;
+    }
 
 ?>
-
-
 
     <!-- Form is displayed in DB info is valid -->
     <!-- Lists tables in database as select -->
     <form action="admin.php" method="get" accept-charset="utf-8">
 
         <input type="hidden" name="page" value="db-edit/settings.php"/>
-        <input type="hidden" name="db-host" value="<?php echo $db_host ?>"/>
-        <input type="hidden" name="db-name" value="<?php echo $db_name ?>"/>
-        <input type="hidden" name="db-user" value="<?php echo $db_user ?>"/>
-        <input type="hidden" name="db-pass" value="<?php echo $db_pass ?>"/>
+        <input type="hidden" name="db-host" value="<?php echo esc_attr($db_host) ?>"/>
+        <input type="hidden" name="db-name" value="<?php echo esc_attr($db_name) ?>"/>
+        <input type="hidden" name="db-user" value="<?php echo esc_attr($db_user) ?>"/>
+        <input type="hidden" name="db-pass" value="<?php echo esc_attr($db_pass) ?>"/>
 
     <?php if (isset($options)): ?>
-        <input type="hidden" name="menu-select" value="<?php echo $menu_key ?>"/>
+        <input type="hidden" name="menu-select" value="<?php echo esc_attr($menu_key) ?>"/>
     <?php endif; ?>
 
         <table class="form-table">
@@ -189,7 +193,7 @@ function fill_settings_page()
     <!-- Compile list of tables in database to Table Selection field -->
 <?php
         if (isset($_GET['table-select']) && $_GET['table-select']!=-1){
-            $table_select = $_GET['table-select'];
+            $table_select = sanitize_text_field($_GET['table-select']);
         }
 
         $statement = $db->prepare(
@@ -204,9 +208,9 @@ function fill_settings_page()
         <?php while ($row = $statement->fetch()) : ?>
 
                         <option
-                            <?php echo $table_select == $row['TABLE_NAME'] ? "selected" : "" ?>
-                            value="<?php echo $row['TABLE_NAME'] ?>"  
-                            label="<?php echo $row['TABLE_NAME'] ?>"
+                            <?php echo $table_select == $row['TABLE_NAME'] ? esc_attr("selected") : esc_attr("") ?>
+                            value="<?php echo esc_attr($row['TABLE_NAME']) ?>"  
+                            label="<?php echo esc_attr($row['TABLE_NAME']) ?>"
                         />
 
         <?php endwhile; ?>
@@ -218,22 +222,29 @@ function fill_settings_page()
         </table>
     </form>
 
-        <?php if (isset($table_select)): ?>
+<?php 
+    if (isset($table_select)){
+        $form_stage++;
+    }
 
-
+    // STAGE 3
+    if (!($form_stage >= 2)){
+        return;
+    }
+?>
 
 <!-- Form to be sent to server -->
 <!-- Contains all relevant info for menu creation -->
-    <form class="ajax-form" action="<?php echo plugins_url('settings-edit.php', __FILE__) ?>" method="post" accept-charset="utf-8">
+    <form class="ajax-form" action="<?php echo esc_url(plugins_url('settings-edit.php', __FILE__)) ?>" method="post" accept-charset="utf-8">
 
-        <input type="hidden" name="db-host" value="<?php echo $db_host ?>"/>
-        <input type="hidden" name="db-name" value="<?php echo $db_name ?>"/>
-        <input type="hidden" name="db-user" value="<?php echo $db_user ?>"/>
-        <input type="hidden" name="db-pass" value="<?php echo $db_pass ?>"/>
-        <input type="hidden" name="table-select" value="<?php echo $table_select ?>"/>
+        <input type="hidden" name="db-host" value="<?php echo esc_attr($db_host) ?>"/>
+        <input type="hidden" name="db-name" value="<?php echo esc_attr($db_name) ?>"/>
+        <input type="hidden" name="db-user" value="<?php echo esc_attr($db_user) ?>"/>
+        <input type="hidden" name="db-pass" value="<?php echo esc_attr($db_pass) ?>"/>
+        <input type="hidden" name="table-select" value="<?php echo esc_attr($table_select) ?>"/>
 
     <?php if (isset($options)): ?>
-        <input type="hidden" name="menu-select" value="<?php echo $menu_key ?>"/>
+        <input type="hidden" name="menu-select" value="<?php echo esc_attr($menu_key) ?>"/>
     <?php endif; ?>
 
         <table class="form-table">
@@ -248,7 +259,7 @@ function fill_settings_page()
                     </label>
                 </th>
                 <td>
-                    <input type="text" name="menu-title" id="menu-title" class="form-input" value="<?php echo $options['name'] ?>"/>
+                    <input type="text" name="menu-title" id="menu-title" class="form-input" value="<?php echo esc_attr($options['name']) ?>"/>
                 </td>
             </tr>
 
@@ -261,7 +272,7 @@ function fill_settings_page()
                     </label>
                 </th>
                 <td>
-                    <input type="text" name="icon" id="icon" class="form-input" placeholder="dashicons-example-icon" value="<?php echo $options['icon'] ?>"/>
+                    <input type="text" name="icon" id="icon" class="form-input" placeholder="dashicons-example-icon" value="<?php echo esc_attr($options['icon']) ?>"/>
                 </td>
             </tr>   
 
@@ -276,29 +287,29 @@ function fill_settings_page()
 
     <!-- Compile list of tables in database to Fields to Display field -->
 <?php 
-        $statement = $db->prepare("DESCRIBE `".$table_select."`");
-        $statement->execute();
-        $statement->setFetchMode(PDO::FETCH_ASSOC);
-        $fields = array();
-        while ($row = $statement->fetch()) : 
+    $statement = $db->prepare("DESCRIBE `".$table_select."`");
+    $statement->execute();
+    $statement->setFetchMode(PDO::FETCH_ASSOC);
+    $fields = array();
+    while ($row = $statement->fetch()) : 
 ?>
 
                     <input
                         type="checkbox" 
                         class="form-input" 
                         name="display-fields[]" 
-                        value="<?php echo $row['Field'] ?>" 
+                        value="<?php echo esc_attr($row['Field']) ?>" 
                         <?php
 				            if (isset($options['displayColumns'])){
-                        		echo in_array($row['Field'],$options['displayColumns']) ? "checked" : "" ;
+                        		echo in_array($row['Field'],$options['displayColumns']) ? esc_attr("checked") : esc_attr("") ;
                         	}
                         ?>
                     />
-                    <label><?php echo $row['Field'] ?></label>
+                    <label><?php echo esc_html($row['Field']) ?></label>
                     <br>
 <?php 
-            $fields[] = $row['Field'];
-        endwhile; 
+        $fields[] = $row['Field'];
+    endwhile; 
 ?>
                     
                 </td>
@@ -315,15 +326,15 @@ function fill_settings_page()
                 <td>
                     <select name="primary-field" id="primary-field">
 
-        <?php foreach ($fields as $field) : ?>
+    <?php foreach ($fields as $field): ?>
 
                         <option
-                            value="<?php echo $field ?>"  
-                            label="<?php echo $field ?>"
-                            <?php echo $options['displayColumns'][0] == $field ? "selected" : "" ?>
+                            value="<?php echo esc_attr($field) ?>"  
+                            label="<?php echo esc_attr($field) ?>"
+                            <?php echo $options['displayColumns'][0] == $field ? esc_attr("selected") : esc_attr("") ?>
                         />
 
-        <?php endforeach ?>
+    <?php endforeach; ?>
 
                     </select>
                 </td>
@@ -340,15 +351,15 @@ function fill_settings_page()
                 <td>
                     <select name="table-id" id="table-id">
 
-        <?php foreach ($fields as $field) : ?>
+    <?php foreach ($fields as $field): ?>
 
                         <option
-                            value="<?php echo $field ?>"  
-                            label="<?php echo $field ?>"
-                            <?php echo $options['tableId'] == $field ? "selected" : "" ?>
+                            value="<?php echo esc_attr($field) ?>"  
+                            label="<?php echo esc_attr($field) ?>"
+                            <?php echo $options['tableId'] == $field ? esc_attr("selected") : esc_attr("") ?>
                         />
 
-        <?php endforeach ?>
+    <?php endforeach; ?>
 
                     </select>
                 </td>
@@ -368,21 +379,21 @@ function fill_settings_page()
                         id="enable-picture-checkbox" 
                         name="image" 
                         value="on" 
-                        <?php echo $options['image'] ? "checked" : "" ?>
+                        <?php echo $options['image'] ? esc_attr("checked") : esc_attr("") ?>
                     />
                     <label>Associate each entry with an image from the following directory:</label>
                     <br>
                     <br>
                     <div class="inline-input-wrapper">
-                        <label for="img-url-root"><?php echo realpath($_SERVER['DOCUMENT_ROOT']) ?></label>
+                        <label for="img-url-root"><?php echo esc_url(realpath($_SERVER['DOCUMENT_ROOT'])) ?></label>
                         <input 
                             type="text" 
                             name="img-url-root" 
                             class="form-input" 
                             id="picture-path-input" 
                             placeholder="/relative/path/from/root/"
-                            value="<?php echo $options['imageUrlRoot'] ?>" 
-                            <?php echo $options['image'] ? "" : "disabled" ?>
+                            value="<?php echo esc_attr($options['imageUrlRoot']) ?>" 
+                            <?php echo $options['image'] ? esc_attr("") : esc_attr("disabled") ?>
                         />
                     </div>
                     <br>
@@ -393,18 +404,18 @@ function fill_settings_page()
                     <select 
                         name="imgsrc" 
                         id="image-field-select" 
-                        <?php echo $options['image'] ? "" : "disabled" ?>
+                        <?php echo $options['image'] ? esc_attr("") : esc_attr("disabled") ?>
                     >
 
-        <?php foreach ($fields as $field) : ?>
+    <?php foreach ($fields as $field): ?>
 
                         <option
-                            value="<?php echo $field ?>"  
-                            label="<?php echo $field ?>"
-                            <?php echo $options['imageSource'] == $field ? "selected" : "" ?>
+                            value="<?php echo esc_attr($field) ?>"  
+                            label="<?php echo esc_attr($field) ?>"
+                            <?php echo $options['imageSource'] == $field ? esc_attr("selected") : esc_attr("") ?>
                         />
 
-        <?php endforeach ?>
+    <?php endforeach; ?>
 
                     </select>
                 </td>
@@ -424,26 +435,24 @@ function fill_settings_page()
                         name="split" 
                         id="split-checkbox" 
                         value="on"
-                        <?php echo $options['split'] ? "checked" : "" ?>
+                        <?php echo $options['split'] ? esc_attr("checked") : esc_attr("") ?>
                     />
                     <label>Display entries in separate tables based on </label>
-
-
                     <select 
                         name="split-by" 
                         id="split-by-select" 
-                        <?php echo $options['split'] ? "" : "disabled" ?>
+                        <?php echo $options['split'] ? esc_attr("") : esc_attr("disabled") ?>
                     >
 
-        <?php foreach ($fields as $field) : ?>
+    <?php foreach ($fields as $field): ?>
 
                         <option
-                            value="<?php echo $field ?>"  
-                            label="<?php echo $field ?>"
-                            <?php echo $options['splitBy'] == $field ? "selected" : "" ?>
+                            value="<?php echo esc_attr($field) ?>"  
+                            label="<?php echo esc_attr($field) ?>"
+                            <?php echo $options['splitBy'] == $field ? esc_attr("selected") : esc_attr("") ?>
                         />
 
-        <?php endforeach ?>
+    <?php endforeach; ?>
 
                     </select>
                     <br>
@@ -454,7 +463,7 @@ function fill_settings_page()
                         name="order" 
                         id="order-checkbox" 
                         value="on"
-                        <?php echo $options['order'] ? "checked" : "" ?>
+                        <?php echo $options['order'] ? esc_attr("checked") : esc_attr("") ?>
                     />
                     <label>Entries are numerically ordered by </label>
 
@@ -462,18 +471,18 @@ function fill_settings_page()
                     <select
                         name="order-by" 
                         id="order-by-select" 
-                        <?php echo $options['order'] ? "" : "disabled" ?>
+                        <?php echo $options['order'] ? esc_attr("") : esc_attr("disabled") ?>
                     >
 
-        <?php foreach ($fields as $field) : ?>
+    <?php foreach ($fields as $field): ?>
 
                         <option
-                            value="<?php echo $field ?>"  
-                            label="<?php echo $field ?>"
-                            <?php echo $options['orderBy'] == $field ? "selected" : "" ?>
+                            value="<?php echo esc_attr($field) ?>"  
+                            label="<?php echo esc_attr($field) ?>"
+                            <?php echo $options['orderBy'] == $field ? esc_attr("selected") : esc_attr("") ?>
                         />
 
-        <?php endforeach ?>
+    <?php endforeach; ?>
 
                     </select>
                     <br>
@@ -485,18 +494,16 @@ function fill_settings_page()
         <input 
             type="submit" 
             class="button button-primary" 
-            value="<?php echo (isset($menu_key) && $menu_key!=-1) ? "Save Changes" : "Add Menu" ?>"
+            value="<?php echo (isset($menu_key) && $menu_key!=-1) ? esc_attr("Save Changes") : esc_attr("Add Menu") ?>"
         />
     </form>
-
-
 
     <?php if (isset($menu_key) && $menu_key!=-1): ?>
     <br>
 <!-- Deletion Form -->
-    <form class="ajax-form" style="float:right" action="<?php echo plugins_url('settings-edit.php', __FILE__) ?>" method="post" accept-charset="utf-8">
+    <form class="ajax-form" style="float:right" action="<?php echo esc_url(plugins_url('settings-edit.php', __FILE__)) ?>" method="post" accept-charset="utf-8">
         <input type="hidden" name="delete" value="on"/>
-        <input type="hidden" name="menu-select" value="<?php echo $menu_key ?>"/>
+        <input type="hidden" name="menu-select" value="<?php echo esc_attr($menu_key) ?>"/>
         <input 
             type="submit" 
             class="button button-secondary" 
@@ -504,13 +511,6 @@ function fill_settings_page()
         />
     </form>
     <?php endif; ?>
-
-
-<?php
-        endif;
-    }
-?>
-
 </div>
 
 <?php

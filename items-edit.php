@@ -2,7 +2,7 @@
 
 function fill_edit_page($id, $options, &$db){
     if (isset($_GET['position'])){
-        $init_pos = $_GET['position'];
+        $init_pos = intval($_GET['position']);
     }
 
     $db_fields = get_fields_from_table($options['dataTable'], $db);
@@ -25,10 +25,10 @@ function fill_edit_page($id, $options, &$db){
     }
 ?>
 
-<div class="wrap" data-id="<?php echo $id ?>" data-name="<?php echo $id ?>">
+<div class="wrap" data-id="<?php echo esc_attr($id) ?>" data-name="<?php echo esc_attr($id) ?>">
     <h1 class="wp-heading-inline">Edit Existing</h1>
     <p>Edit an existing entry in this table.</p>
-    <form class="ajax-form" action="<?php echo plugins_url('db-edit.php', __FILE__) ?>" method="post" accept-charset="utf-8">
+    <form class="ajax-form" action="<?php echo esc_url(plugins_url('db-edit.php', __FILE__)) ?>" method="post" accept-charset="utf-8">
         <table class="form-table">
             <tbody>
             <tr>
@@ -48,9 +48,9 @@ function fill_edit_page($id, $options, &$db){
     <?php while ($row = $statement->fetch()) : ?>
 
                         <option
-                            <?php echo $init_pos == $row[$options['tableId']] ? "selected" : "" ?>
-                            value="<?php echo $row[$options['tableId']] ?>"  
-                            label="<?php echo htmlspecialchars($row[$options['displayColumns'][0]]) ?>"
+                            <?php echo $init_pos == $row[$options['tableId']] ? esc_attr("selected") : esc_attr("") ?>
+                            value="<?php echo esc_attr($row[$options['tableId']]) ?>"  
+                            label="<?php echo esc_attr($row[$options['displayColumns'][0]]) ?>"
                         />
 
     <?php endwhile; ?>
@@ -86,18 +86,18 @@ function fill_edit_page($id, $options, &$db){
         ?>
             <tr class="form-field form-required">
                 <th>
-                    <label for=<?php echo $field . '-input' ?>>
-                        <?php echo ucwords($field) ?>
+                    <label for=<?php echo esc_attr($field . '-input') ?>>
+                        <?php echo esc_attr(ucwords($field)) ?>
                         <span class="description">(required)</span>
                     </label>
                 </th>
                 <td>
                     <input 
                         type="text"
-                        name="<?php echo $field ?>" 
-                        id="<?php echo $field . '-input' ?>" 
+                        name="<?php echo esc_attr($field) ?>" 
+                        id="<?php echo esc_attr($field . '-input') ?>" 
                         class="form-input" 
-                        value="<?php echo  htmlspecialchars($field_value) ?>" />
+                        value="<?php echo esc_attr($field_value) ?>" />
                 </td>
             </tr>
 
@@ -106,8 +106,8 @@ function fill_edit_page($id, $options, &$db){
             </tbody>
         </table>
 
-        <input type="hidden" name="menu-id" value="<?php echo $id ?>"/>
-        <input type="hidden" name="task" value="<?php echo 'row-edit' ?>"/>
+        <input type="hidden" name="menu-id" value="<?php echo esc_attr($id) ?>"/>
+        <input type="hidden" name="task" value="<?php echo esc_attr('row-edit') ?>"/>
         <input type="submit" class="button button-primary" value="Update Entry"/>
 
     </form>
