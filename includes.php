@@ -2,6 +2,7 @@
 require_once('constants.php');
 require_once('header.php');
 require_once('functions.php');
+require_once('form-handlers.php');
 require_once('generators.php');
 
 require_once('settings.php');

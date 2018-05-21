@@ -37,7 +37,7 @@ function init_menu() {
         'Jot Settings', 
         'manage_options', 
         'db-edit/settings.php',  
-        function() { fill_settings_page(); } );
+        function() { jotdm_fill_settings_page(); } );
 
 
     $ini = parse_ini_file("settings.ini",true);
@@ -56,16 +56,23 @@ function init_menu() {
 			'Add New', 
 			'manage_options', 
 			'db-edit/'.$key.'-add.php',  
-            function() use ($key, $options, &$db) { fill_add_page($key, $options, $db); } );
+            function() use ($key, $options, &$db) { jotdm_fill_add_page($key, $options, $db); } );
             
         add_submenu_page( 'db-edit/'.$key.'-list.php',
             $options['name'].' Edit',
 			'Edit Existing', 
 			'manage_options', 
 			'db-edit/'.$key.'-edit.php',  
-			function() use ($key, $options, &$db) { fill_edit_page($key, $options, $db); } );
+			function() use ($key, $options, &$db) { jotdm_fill_edit_page($key, $options, $db); } );
     }
 }
+
+add_action( 'wp_ajax_row_add', 'row_add_handler' );
+add_action( 'wp_ajax_row_edit', 'row_edit_handler' );
+add_action( 'wp_ajax_row_reorder', 'row_reorder_handler' );
+add_action( 'wp_ajax_row_delete', 'row_delete_handler' );
+add_action( 'wp_ajax_menu_delete', 'menu_delete_handler' );
+add_action( 'wp_ajax_menu_edit', 'menu_edit_handler' );
 
 add_action( 'admin_menu', 'init_menu' );
 add_action( 'admin_enqueue_scripts', 'init_scripts');

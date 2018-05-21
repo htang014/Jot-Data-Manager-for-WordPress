@@ -1,7 +1,7 @@
 <?php
 // HTML OBJECT GENERATORS
 
-function generate_table($id, $options, &$db, $split_state=null, $filter=null){
+function jotdm_generate_table($id, $options, &$db, $split_state=null, $filter=null){
     $colspan = count($options['displayColumns']) + 1;
     if ($options['order']) {
         $colspan++;
@@ -19,7 +19,7 @@ function generate_table($id, $options, &$db, $split_state=null, $filter=null){
         <table class="widefat fixed striped" style="<?php echo $options['split'] ? esc_attr('') : esc_attr('border-top: none') ?>" >
             <thead>
                 <?php 
-                echo generate_table_header($options['displayColumns'], isset($filter) ? false : $options['order']);
+                echo jotdm_generate_table_header($options['displayColumns'], isset($filter) ? false : $options['order']);
                 ?>
             </thead>
             </tbody>
@@ -52,7 +52,7 @@ function generate_table($id, $options, &$db, $split_state=null, $filter=null){
                     $values[$field] = $row[$field];
                 }
                 $imgsrc = $options['image'] ? $options['imageUrlRoot'] . $row[$options['imageSource']] : NULL; 
-                echo generate_table_item($id, $row[$options['tableId']], $values, isset($filter) ? false : $options['order'], $imgsrc );
+                echo jotdm_generate_table_item($id, $row[$options['tableId']], $values, isset($filter) ? false : $options['order'], $imgsrc );
 
             }
             if ($fetch_empty):
@@ -68,7 +68,7 @@ function generate_table($id, $options, &$db, $split_state=null, $filter=null){
 
             <tfoot>
                 <?php
-                echo generate_table_header($options['displayColumns'], isset($filter) ? false : $options['order']);
+                echo jotdm_generate_table_header($options['displayColumns'], isset($filter) ? false : $options['order']);
                 ?>
             </tfoot>
         </table>
@@ -78,7 +78,7 @@ function generate_table($id, $options, &$db, $split_state=null, $filter=null){
     return ob_get_clean();
 }
 
-function generate_table_item($menu_name, $pos, $values, $order, $imgsrc=NULL)
+function jotdm_generate_table_item($menu_name, $pos, $values, $order, $imgsrc=NULL)
 {
     ob_start();
 ?>
@@ -127,7 +127,7 @@ function generate_table_item($menu_name, $pos, $values, $order, $imgsrc=NULL)
     return ob_get_clean();
 }
 
-function generate_table_header($fields, $order){
+function jotdm_generate_table_header($fields, $order){
     ob_start();
     ?>
 
@@ -138,7 +138,7 @@ function generate_table_header($fields, $order){
         <?php
         foreach ($fields as $field): 
         ?>
-            <th class="row-title"><?php echo esc_html(($order?'':'<a>').ucwords( $field ).($order?'':'</a>')) ?></th>
+            <th class="row-title"><?php echo ($order?'':'<a>').esc_html(ucwords( $field )).($order?'':'</a>') ?></th>
         <?php 
         endforeach;
 

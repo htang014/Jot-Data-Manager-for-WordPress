@@ -1,8 +1,8 @@
 <?php
 
-function fill_add_page($id, $options, &$db)
+function jotdm_fill_add_page($id, $options, &$db)
 {
-    $db_fields = get_fields_from_table($options['dataTable'], $db);
+    $db_fields = jotdm_get_fields_from_table($options['dataTable'], $db);
     $edit_fields = $options['displayColumns'];
     if ($options['split']) {
         $edit_fields[] = $options['splitBy'];
@@ -61,7 +61,7 @@ function fill_add_page($id, $options, &$db)
             </tbody>
         </table>
         <input type="hidden" name="menu-id" value="<?php echo esc_attr($id) ?>"/>
-        <input type="hidden" name="task" value="row-add"/>
+        <input type="hidden" name="action" value="row_add"/>
         <input type="submit" class="button button-primary" value="Add New"/>
     </form>
 </div>

@@ -1,11 +1,8 @@
 <?php
 
-function fill_edit_page($id, $options, &$db){
-    if (isset($_GET['position'])){
-        $init_pos = intval($_GET['position']);
-    }
-
-    $db_fields = get_fields_from_table($options['dataTable'], $db);
+function jotdm_fill_edit_page($id, $options, &$db){
+    $init_pos = isset($_GET['position']) ? intval($_GET['position']) : -1;
+    $db_fields = jotdm_get_fields_from_table($options['dataTable'], $db);
     $edit_fields = $options['displayColumns'];
     if ($options['split']) {
         $edit_fields[] = $options['splitBy'];
@@ -97,7 +94,7 @@ function fill_edit_page($id, $options, &$db){
                         name="<?php echo esc_attr($field) ?>" 
                         id="<?php echo esc_attr($field . '-input') ?>" 
                         class="form-input" 
-                        value="<?php echo esc_attr($field_value) ?>" />
+                        value="<?php echo isset($field_value) ? esc_attr($field_value) : "" ?>" />
                 </td>
             </tr>
 
@@ -107,7 +104,7 @@ function fill_edit_page($id, $options, &$db){
         </table>
 
         <input type="hidden" name="menu-id" value="<?php echo esc_attr($id) ?>"/>
-        <input type="hidden" name="task" value="<?php echo esc_attr('row-edit') ?>"/>
+        <input type="hidden" name="action" value="row_edit"/>
         <input type="submit" class="button button-primary" value="Update Entry"/>
 
     </form>

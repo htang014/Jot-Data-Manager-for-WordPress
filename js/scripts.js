@@ -9,18 +9,76 @@ jQuery(document).ready(function($){
         var upDown = $this.attr('data-up-down');
         var pos = row.attr('data-pos');
 
-		$.post(plugin.url + "db-edit.php", 
+		$.post(ajaxurl, 
 		{
             'menu-id': menuId,
-			'task': "row-reorder",
+			'action': "row_reorder",
 			'move': upDown,
 			'position': pos,
-		},
-		function(data, status){
+		})
+		.done(function(data){
             console.log(data);
 			location.reload();
-		});
+        })
+        .fail(function(xhr, status, error){
+            console.log(xhr.responseText);
+        });
     });
+
+    $('.generic-form').submit(function(e) {
+        $(this).find('.form-required').each(function() {
+            if (!$(this).find(".form-input").val()){
+                e.preventDefault(); 
+                $(this).addClass("form-invalid");
+            }
+        });
+    });
+
+    $('.ajax-form').submit(function(e) {
+        e.preventDefault();    
+        var formData = new FormData(this);
+        var menuName = $(this).parents('.wrap').attr('data-name');
+        //var action = $(this).attr("action");
+        var err = false;
+
+        $(this).find('.form-required').each(function() {
+            if (!$(this).find(".form-input").val()){
+                err = true;
+                $(this).addClass("form-invalid");
+            }
+        });
+
+        // for (var pair of formData.entries()) {
+        //     console.log(pair[0]+ ', ' + pair[1]); 
+        // }
+
+        if (err) {
+            return;
+        }
+
+        $.ajax({
+            type: 'POST',
+            url: ajaxurl,//action,
+            data: formData,
+            cache: false,
+            contentType: false,
+            processData: false,
+            success: function(response){
+                console.log(response);
+                //console.log("admin.php?page=db-edit%2F"+menuName+"-list.php");
+                if (menuName){
+                    window.location.href = "admin.php?page=db-edit%2F"+menuName.replace(/\s/g,'+')+"-list.php";
+                }
+                else {
+                    location.reload();
+                }
+            },
+            error: function(response){
+                console.log(response);
+            }
+        });
+        return false;
+    }); 
 
     $('thead input:checkbox, tfoot input:checkbox').change(function() {
         var $this = $(this);
@@ -87,59 +145,4 @@ jQuery(document).ready(function($){
     $('#table-select').change(function () {
         $(this).parents('form').submit();
     });
-
-    $('.generic-form').submit(function(e) {
-        $(this).find('.form-required').each(function() {
-            if (!$(this).find(".form-input").val()){
-                e.preventDefault(); 
-                $(this).addClass("form-invalid");
-            }
-        });
-    });
-
-    $('.ajax-form').submit(function(e) {
-        e.preventDefault();    
-        var formData = new FormData(this);
-        var menuName = $(this).parents('.wrap').attr('data-name');
-        var action = $(this).attr("action");
-        var err = false;
-
-        $(this).find('.form-required').each(function() {
-            if (!$(this).find(".form-input").val()){
-                err = true;
-                $(this).addClass("form-invalid");
-            }
-        });
-
-        // for (var pair of formData.entries()) {
-        //     console.log(pair[0]+ ', ' + pair[1]); 
-        // }
-
-        if (err) {
-            return;
-        }
-
-        $.ajax({
-            type: 'POST',
-            url: action,
-            data: formData,
-            cache: false,
-            contentType: false,
-            processData: false,
-            success: function(response){
-                console.log(response);
-                //console.log("admin.php?page=db-edit%2F"+menuName+"-list.php");
-                if (menuName){
-                    window.location.href = "admin.php?page=db-edit%2F"+menuName.replace(/\s/g,'+')+"-list.php";
-                }
-                else {
-                    location.reload();
-                }
-            },
-            error: function(response){
-                console.log(response);
-            }
-        });
-        return false;
-    }); 
 }); 

@@ -1,6 +1,6 @@
 <?php
 // INI Editing Functions
-function write_ini_file($file, $array = []) {
+function jotdm_write_ini_file($file, $array = []) {
     // check first argument is string
     if (!is_string($file)) {
         throw new \InvalidArgumentException('Function argument 1 must be a string.');
@@ -68,49 +68,34 @@ function write_ini_file($file, $array = []) {
     return true;
 }
 
-// General Functions
-function ms_escape_string($data) {
-    if ( !isset($data) or empty($data) ) return '';
-    if ( is_numeric($data) ) return $data;
-
-    $non_displayables = array(
-        '/%0[0-8bcef]/',            // url encoded 00-08, 11, 12, 14, 15
-        '/%1[0-9a-f]/',             // url encoded 16-31
-        '/[\x00-\x08]/',            // 00-08
-        '/\x0b/',                   // 11
-        '/\x0c/',                   // 12
-        '/[\x0e-\x1f]/'             // 14-31
-    );
-    foreach ( $non_displayables as $regex )
-        $data = preg_replace( $regex, '', $data );
-    $data = str_replace("'", "''", $data );
-    return $data;
-}
-
-function parse_title($title, $max_count=null){
-    global $flg_invalid_field_status;
-    global $array_invalid_field;
-    global $flg_success_status;
-    
-    $title_copy = $title;
-    $title_copy = str_replace(',', '<br/>', $title_copy, $i);
-    if (isset($max_count) && ($i > $max_count-1)){
-        $flg_invalid_field_status = FLAG_ERROR;
-        $flg_success_status = FLAG_ERROR;
-        $array_invalid_field[] = "Too many arguments (Max: ".$max_count.")";
-
-        $title_copy = explode('<br/>', $title_copy);
-        $title_copy = array_slice($title_copy,0,$max_count);
-        $title_copy = implode('<br/>', $title_copy);
-
-        return $title_copy;
+// Error handling
+function jotdm_error_status_handler(){
+    if ($jotdm_flg_success_status == JOTDM_FLAG_SUCCESS){
+        header("HTTP/1.1 200 OK");
     }
     else {
-        return $title_copy;
+        if ($jotdm_flg_post_status == JOTDM_FLAG_ERROR){
+            header("HTTP/1.0 400 Bad Request");
+            echo "Invalid post request";
+        }
+        if ($jotdm_flg_required_field_status == JOTDM_FLAG_ERROR){
+            header("HTTP/1.0 400 Bad Request");
+            echo "The following required fields are missing:";
+            foreach ($jotdm_array_required_field as $msg){
+                echo $msg;
+            }
+        }
+        if ($jotdm_flg_invalid_field_status == JOTDM_FLAG_ERROR){
+            header("HTTP/1.0 400 Bad Request");
+            foreach ($jotdm_array_invalid_field as $msg){
+                echo $msg;
+            }
+        }
     }
 }
 
-function get_fields_from_table($table, $db){
+// General Functions
+function jotdm_get_fields_from_table($table, $db){
     $fields = array();
     $statement = $db->prepare("DESCRIBE `".$table."`");
     $statement->execute();
@@ -121,10 +106,10 @@ function get_fields_from_table($table, $db){
     return $fields;
 }
 
-function upload_image($image, $path){
-    global $flg_invalid_field_status;
-    global $array_invalid_field;
-    global $flg_success_status;
+function jotdm_upload_image($image, $path){
+    global $jotdm_flg_invalid_field_status;
+    global $jotdm_array_invalid_field;
+    global $jotdm_flg_success_status;
 
     $image_basename = basename($image["name"]);
     $image_file_type = strtolower(pathinfo($image_basename,PATHINFO_EXTENSION));
@@ -135,38 +120,38 @@ function upload_image($image, $path){
 
     $check = getimagesize($image["tmp_name"]);
     if($check == false) {
-        $flg_invalid_field_status = FLAG_ERROR;
-        $flg_success_status = FLAG_ERROR;
-        $array_invalid_field[] = "Image: File is not an image.";
+        $jotdm_flg_invalid_field_status = JOTDM_FLAG_ERROR;
+        $jotdm_flg_success_status = JOTDM_FLAG_ERROR;
+        $jotdm_array_invalid_field[] = "Image: File is not an image.";
         return null;
     }
     while (file_exists($target_file_path)) {
         $target_file = uniqid() . "." . $image_file_type;
         $target_file_path = $target_dir . $target_file;
     }
-    if ($image["size"] > MAX_IMAGE_SIZE) {
-        $flg_invalid_field_status = FLAG_ERROR;
-        $flg_success_status = FLAG_ERROR;
-        $array_invalid_field[] = "Image: Too large (Maximum size: 4MB).";
+    if ($image["size"] > JOTDM_MAX_IMAGE_SIZE) {
+        $jotdm_flg_invalid_field_status = JOTDM_FLAG_ERROR;
+        $jotdm_flg_success_status = JOTDM_FLAG_ERROR;
+        $jotdm_array_invalid_field[] = "Image: Too large (Maximum size: 4MB).";
         return null;
     }
     if ($image_file_type != "jpg" && $image_file_type != "png" && $image_file_type != "jpeg") {
-        $flg_invalid_field_status = FLAG_ERROR;
-        $flg_success_status = FLAG_ERROR;
-        $array_invalid_field[] = "Image: Unsupported file type (jpg, jpeg, and png only).";
+        $jotdm_flg_invalid_field_status = JOTDM_FLAG_ERROR;
+        $jotdm_flg_success_status = JOTDM_FLAG_ERROR;
+        $jotdm_array_invalid_field[] = "Image: Unsupported file type (jpg, jpeg, and png only).";
         return null;
     }
     if (move_uploaded_file($image["tmp_name"], $target_file_path)) {
         return $target_file;
     } else {
-        $flg_invalid_field_status = FLAG_ERROR;
-        $flg_success_status = FLAG_ERROR;
-        $array_invalid_field[] = "Image: Problem uploading file.";
+        $jotdm_flg_invalid_field_status = JOTDM_FLAG_ERROR;
+        $jotdm_flg_success_status = JOTDM_FLAG_ERROR;
+        $jotdm_array_invalid_field[] = "Image: Problem uploading file.";
         return null;
     }
 }
 
-function delete_image($path, $file){
+function jotdm_delete_image($path, $file){
     global $base_files;
     if (file_exists($_SERVER['DOCUMENT_ROOT'] . $path . $file) &&
         !in_array($file,$base_files)){
@@ -176,7 +161,7 @@ function delete_image($path, $file){
 }
 
 // DB Editing Functions
-function add_db_entry($options, $fields, &$db, $image=null){
+function jotdm_add_db_entry($options, $fields, &$db, $image=null){
     $table = $options['dataTable'];
     $order_field = $options['order'] ? $options['orderBy'] : NULL;
     $image_field = $options['image'] ? $options['imageSource'] : NULL;
@@ -203,7 +188,7 @@ function add_db_entry($options, $fields, &$db, $image=null){
     $values_clause = array();
 
     if (isset($image_field)){
-        $imgsrc = isset($image) ? upload_image($image, $options['imageUrlRoot']) : DEFAULT_PROFILE_IMAGE;
+        $imgsrc = isset($image) ? jotdm_upload_image($image, $options['imageUrlRoot']) : DEFAULT_PROFILE_IMAGE;
         $tfields[$image_field] = $imgsrc;
     }
     if (isset($order_field)){
@@ -222,9 +207,11 @@ function add_db_entry($options, $fields, &$db, $image=null){
     $values_clause = implode(",",$values_clause);
     $statement = $db->prepare("INSERT INTO `".$table."` (".$fields_clause.") VALUES (".$values_clause.")");
     $statement->execute();
+
+    //print_r("INSERT INTO `".$table."` (".$fields_clause.") VALUES (".$values_clause.")");
 }
 
-function edit_db_entry($options, $pos, $fields, &$db){
+function jotdm_edit_db_entry($options, $pos, $fields, &$db){
     $table = $options['dataTable'];
     $table_id = $options['tableId'];
 
@@ -271,7 +258,7 @@ function edit_db_entry($options, $pos, $fields, &$db){
     }
 }
 
-function move_db_entry($options, $pos, $move, &$db){
+function jotdm_move_db_entry($options, $pos, $move, &$db){
     $order;
 
     $table = $options['dataTable'];
@@ -302,7 +289,7 @@ function move_db_entry($options, $pos, $move, &$db){
     $statement->execute();
 }
 
-function delete_db_entry($options ,$pos, &$db){
+function jotdm_delete_db_entry($options ,$pos, &$db){
     $table = $options['dataTable'];
     $table_id = $options['tableId'];
     $order_field = $options['order'] ? $options['orderBy'] : NULL;
@@ -334,26 +321,26 @@ function delete_db_entry($options ,$pos, &$db){
         $statement->execute();
     }
     if (isset($image_field)){
-        delete_image($options['imageUrlRoot'] ,$imgsrc);
+        jotdm_delete_image($options['imageUrlRoot'] ,$imgsrc);
     }
 }
 
-function edit_db_image($options, $pos, &$db, $image=null){
+function jotdm_edit_db_image($options, $pos, &$db, $image=null){
     $statement = $db->prepare("SELECT * FROM `".$options['dataTable']."` WHERE `".$options['tableId']."`=".$pos);
     $statement->execute();
     $statement->setFetchMode(PDO::FETCH_ASSOC);
     while ( $row = $statement->fetch() ) {
         $imgsrc = $row[$options['imageSource']];
     }
-    delete_image($options['imageUrlRoot'] ,$imgsrc);
+    jotdm_delete_image($options['imageUrlRoot'] ,$imgsrc);
 
     if (isset($image)){
-        $imgsrc = upload_image($image, $options['imageUrlRoot']);
+        $imgsrc = jotdm_upload_image($image, $options['imageUrlRoot']);
         $statement = $db->prepare("UPDATE `".$options['dataTable']."` SET `".$options['imageSource']."`='".$imgsrc."' WHERE `".$options['tableId']."`=".$pos);
         $statement->execute();
     }
     else {
-        edit_db_entry($options, $pos, array($options['imageSource'] => DEFAULT_PROFILE_IMAGE));
+        jotdm_edit_db_entry($options, $pos, array($options['imageSource'] => DEFAULT_PROFILE_IMAGE));
     }
 }
 

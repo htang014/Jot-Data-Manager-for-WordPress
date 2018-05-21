@@ -1,13 +1,13 @@
 <?php
 require_once 'includes.php';
 
-function fill_settings_page()
+function jotdm_fill_settings_page()
 {
     //STAGE 1
     $form_stage = 0;
     $ini = parse_ini_file("settings.ini",true);
-    $menu_key = $_GET['menu-select'];
-    $options = $ini[$menu_key];
+    $menu_key = isset($_GET['menu-select']) ? intval($_GET['menu-select']) : -1;
+    $options = ($menu_key>=0) ? $ini[$menu_key] : null;
 
     if (isset($options)){
         $db_host = $options['dbhost'];
@@ -106,7 +106,13 @@ function fill_settings_page()
                         </label>
                     </th>
                     <td>
-                        <input type="text" name="db-host" class="form-input" id="db-host" value="<?php echo esc_attr($db_host) ?>"/>
+                        <input 
+                            type="text" 
+                            name="db-host" 
+                            class="form-input" 
+                            id="db-host" 
+                            value="<?php echo isset($db_host) ? esc_attr($db_host) : '' ?>"
+                        />
                     </td>
                 </tr>
     <!-- Database Name -->
@@ -118,7 +124,13 @@ function fill_settings_page()
                         </label>
                     </th>
                     <td>
-                        <input type="text" name="db-name" class="form-input" id="db-name" value="<?php echo esc_attr($db_name) ?>"/>
+                        <input 
+                            type="text"
+                            name="db-name" 
+                            class="form-input" 
+                            id="db-name" 
+                            value="<?php echo isset($db_name) ? esc_attr($db_name) : '' ?>"
+                        />
                     </td>
                 </tr>
     <!-- Database Credentials -->
@@ -130,8 +142,21 @@ function fill_settings_page()
                         </label>
                     </th>
                     <td>
-                        <input type="text" name="db-user" class="form-input" id="db-user" placeholder="User" value="<?php echo esc_attr($db_user) ?>"/>
-                        <input type="text" name="db-pass" class="form-input" placeholder="Password" value="<?php echo esc_attr($db_pass) ?>"/>
+                        <input
+                            type="text" 
+                            name="db-user" 
+                            class="form-input" 
+                            id="db-user" 
+                            placeholder="User" 
+                            value="<?php echo isset($db_user) ? esc_attr($db_user) : '' ?>"
+                        />
+                        <input 
+                            type="text" 
+                            name="db-pass" 
+                            class="form-input" 
+                            placeholder="Password" 
+                            value="<?php echo isset($db_pass) ? esc_attr($db_pass) : '' ?>"
+                        />
                     </td>
                 </tr>
             </tbody>
@@ -235,8 +260,8 @@ function fill_settings_page()
 
 <!-- Form to be sent to server -->
 <!-- Contains all relevant info for menu creation -->
-    <form class="ajax-form" action="<?php echo esc_url(plugins_url('settings-edit.php', __FILE__)) ?>" method="post" accept-charset="utf-8">
-
+    <form class="ajax-form">
+        <input type="hidden" name="action" value="menu_edit"/>
         <input type="hidden" name="db-host" value="<?php echo esc_attr($db_host) ?>"/>
         <input type="hidden" name="db-name" value="<?php echo esc_attr($db_name) ?>"/>
         <input type="hidden" name="db-user" value="<?php echo esc_attr($db_user) ?>"/>
@@ -502,7 +527,7 @@ function fill_settings_page()
     <br>
 <!-- Deletion Form -->
     <form class="ajax-form" style="float:right" action="<?php echo esc_url(plugins_url('settings-edit.php', __FILE__)) ?>" method="post" accept-charset="utf-8">
-        <input type="hidden" name="delete" value="on"/>
+        <input type="hidden" name="action" value="menu_delete"/>
         <input type="hidden" name="menu-select" value="<?php echo esc_attr($menu_key) ?>"/>
         <input 
             type="submit" 
