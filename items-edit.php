@@ -1,6 +1,7 @@
 <?php
 
 function jotdm_fill_edit_page($id, $options, &$db){
+    global $jotdm_ajax_nonce;
     $init_pos = isset($_GET['position']) ? intval($_GET['position']) : -1;
     $db_fields = jotdm_get_fields_from_table($options['dataTable'], $db);
     $edit_fields = $options['displayColumns'];
@@ -25,7 +26,8 @@ function jotdm_fill_edit_page($id, $options, &$db){
 <div class="wrap" data-id="<?php echo esc_attr($id) ?>" data-name="<?php echo esc_attr($id) ?>">
     <h1 class="wp-heading-inline">Edit Existing</h1>
     <p>Edit an existing entry in this table.</p>
-    <form class="ajax-form" action="<?php echo esc_url(plugins_url('db-edit.php', __FILE__)) ?>" method="post" accept-charset="utf-8">
+    <form class="ajax-form">
+        <input type="hidden" name="security" value="<?php echo $jotdm_ajax_nonce ?>"/>
         <table class="form-table">
             <tbody>
             <tr>

@@ -4,6 +4,7 @@ require_once 'includes.php';
 function jotdm_fill_settings_page()
 {
     //STAGE 1
+    global $jotdm_ajax_nonce;
     $form_stage = 0;
     $ini = parse_ini_file("settings.ini",true);
     $menu_key = isset($_GET['menu-select']) ? intval($_GET['menu-select']) : -1;
@@ -261,6 +262,7 @@ function jotdm_fill_settings_page()
 <!-- Form to be sent to server -->
 <!-- Contains all relevant info for menu creation -->
     <form class="ajax-form">
+        <input type="hidden" name="security" value="<?php echo $jotdm_ajax_nonce ?>"/>
         <input type="hidden" name="action" value="menu_edit"/>
         <input type="hidden" name="db-host" value="<?php echo esc_attr($db_host) ?>"/>
         <input type="hidden" name="db-name" value="<?php echo esc_attr($db_name) ?>"/>
@@ -526,7 +528,8 @@ function jotdm_fill_settings_page()
     <?php if (isset($menu_key) && $menu_key!=-1): ?>
     <br>
 <!-- Deletion Form -->
-    <form class="ajax-form" style="float:right" action="<?php echo esc_url(plugins_url('settings-edit.php', __FILE__)) ?>" method="post" accept-charset="utf-8">
+    <form class="ajax-form" style="float:right">
+        <input type="hidden" name="security" value="<?php echo $jotdm_ajax_nonce ?>"/>
         <input type="hidden" name="action" value="menu_delete"/>
         <input type="hidden" name="menu-select" value="<?php echo esc_attr($menu_key) ?>"/>
         <input 

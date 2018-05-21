@@ -9,7 +9,8 @@ License: GPL2
 */
 require_once('includes.php');
 
-function init_scripts() {
+function jotdm_init_scripts() {
+    global $jotdm_ajax_nonce;
     wp_register_style(
         'db-edit-styles', 
         plugins_url('css/style.css', __FILE__),
@@ -28,11 +29,15 @@ function init_scripts() {
     wp_enqueue_script( 'db-edit-scripts' );
     wp_localize_script('db-edit-scripts', 'plugin', array(
         'url' => plugins_url('/', __FILE__),
-        'admin_root' => admin_url()
+        'admin_root' => admin_url(),
+        'ajax_nonce' => $jotdm_ajax_nonce
     ));
 }
 
-function init_menu() {
+function jotdm_init_menu() {
+    global $jotdm_ajax_nonce;
+    $jotdm_ajax_nonce = wp_create_nonce( "jotdm-ajax-nonce" );
+
     add_options_page('Jot Settings',
         'Jot Settings', 
         'manage_options', 
@@ -67,13 +72,13 @@ function init_menu() {
     }
 }
 
-add_action( 'wp_ajax_row_add', 'row_add_handler' );
-add_action( 'wp_ajax_row_edit', 'row_edit_handler' );
-add_action( 'wp_ajax_row_reorder', 'row_reorder_handler' );
-add_action( 'wp_ajax_row_delete', 'row_delete_handler' );
-add_action( 'wp_ajax_menu_delete', 'menu_delete_handler' );
-add_action( 'wp_ajax_menu_edit', 'menu_edit_handler' );
+add_action( 'wp_ajax_row_add', 'jotdm_row_add_handler' );
+add_action( 'wp_ajax_row_edit', 'jotdm_row_edit_handler' );
+add_action( 'wp_ajax_row_reorder', 'jotdm_row_reorder_handler' );
+add_action( 'wp_ajax_row_delete', 'jotdm_row_delete_handler' );
+add_action( 'wp_ajax_menu_delete', 'jotdm_menu_delete_handler' );
+add_action( 'wp_ajax_menu_edit', 'jotdm_menu_edit_handler' );
 
-add_action( 'admin_menu', 'init_menu' );
-add_action( 'admin_enqueue_scripts', 'init_scripts');
+add_action( 'admin_menu', 'jotdm_init_menu' );
+add_action( 'admin_enqueue_scripts', 'jotdm_init_scripts');
 ?>

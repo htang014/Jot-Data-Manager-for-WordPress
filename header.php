@@ -13,5 +13,9 @@ $jotdm_flg_invalid_field_status = JOTDM_FLAG_DEFAULT;
 $jotdm_array_required_field = array();
 $jotdm_array_invalid_field = array();
 
+$jotdm_ajax_nonce = null;
+
+$jotdm_base_files = array(JOTDM_DEFAULT_PROFILE_IMAGE);
+
 ob_start();
 ?>

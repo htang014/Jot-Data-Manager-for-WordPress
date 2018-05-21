@@ -152,9 +152,9 @@ function jotdm_upload_image($image, $path){
 }
 
 function jotdm_delete_image($path, $file){
-    global $base_files;
+    global $jotdm_base_files;
     if (file_exists($_SERVER['DOCUMENT_ROOT'] . $path . $file) &&
-        !in_array($file,$base_files)){
+        !in_array($file,$jotdm_base_files)){
 
         unlink($_SERVER['DOCUMENT_ROOT'] . $path . $file);
     }

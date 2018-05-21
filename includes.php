@@ -1,4 +1,5 @@
 <?php
+//require($_SERVER['DOCUMENT_ROOT'].'/wp-load.php');
 require_once('constants.php');
 require_once('header.php');
 require_once('functions.php');

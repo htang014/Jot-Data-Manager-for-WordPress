@@ -1,6 +1,7 @@
 <?php
 function fill_list_page($id, $options, &$db)
 {
+    global $jotdm_ajax_nonce;
     $db_fields = jotdm_get_fields_from_table($options['dataTable'], $db);
     $order_field = $options['order'] ? $options['orderBy'] : null;
     $image_field = $options['image'] ? $options['imageSource'] : null;
@@ -29,7 +30,8 @@ function fill_list_page($id, $options, &$db)
     </p>
 </form>
 
-<form class="ajax-form" action="<?php echo esc_url(plugins_url('db-edit.php', __FILE__)) ?>" method="post" >
+<form class="ajax-form">
+    <input type="hidden" name="security" value="<?php echo $jotdm_ajax_nonce ?>"/>
     <div class="tablenav top">
         <select name="action">
             <option selected value="-1">Bulk Actions</option>

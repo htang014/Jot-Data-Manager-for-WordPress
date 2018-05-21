@@ -14,7 +14,8 @@ jQuery(document).ready(function($){
             'menu-id': menuId,
 			'action': "row_reorder",
 			'move': upDown,
-			'position': pos,
+            'position': pos,
+            'security': plugin.ajax_nonce,
 		})
 		.done(function(data){
             console.log(data);

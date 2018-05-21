@@ -1,6 +1,7 @@
 <?php
 // Table management
-function row_add_handler(){
+function jotdm_row_add_handler(){
+    check_ajax_referer( 'jotdm-ajax-nonce', 'security' );
     $jotdm_flg_success_status = JOTDM_FLAG_SUCCESS;
 
     if (isset($_POST['menu-id'])){
@@ -8,6 +9,7 @@ function row_add_handler(){
         $fields = $_POST;
         unset($fields['action']);
         unset($fields['menu-id']);  
+        unset($fields['security']);
 
         foreach ($fields as &$field){
             $field = sanitize_text_field($field);
@@ -29,7 +31,8 @@ function row_add_handler(){
     wp_die();
 }
 
-function row_edit_handler(){
+function jotdm_row_edit_handler(){
+    check_ajax_referer( 'jotdm-ajax-nonce', 'security' );
     $jotdm_flg_success_status = JOTDM_FLAG_SUCCESS;
     
     if (isset($_POST['menu-id']) &&
@@ -40,6 +43,7 @@ function row_edit_handler(){
         unset($fields['menu-id']);
         unset($fields['position']);
         unset($fields['remove-image']);
+        unset($fields['security']);
 
         foreach ($fields as &$field){
             $field = sanitize_text_field($field);
@@ -68,7 +72,8 @@ function row_edit_handler(){
     wp_die();
 }
 
-function row_reorder_handler(){
+function jotdm_row_reorder_handler(){
+    check_ajax_referer( 'jotdm-ajax-nonce', 'security' );
     $jotdm_flg_success_status = JOTDM_FLAG_SUCCESS;
 
     if( isset($_POST['menu-id']) &&
@@ -93,7 +98,8 @@ function row_reorder_handler(){
     wp_die();
 }
 
-function row_delete_handler(){
+function jotdm_row_delete_handler(){
+    check_ajax_referer( 'jotdm-ajax-nonce', 'security' );
     $jotdm_flg_success_status = JOTDM_FLAG_SUCCESS;
 
     if (isset($_POST['menu-id']) &&
@@ -121,7 +127,8 @@ function row_delete_handler(){
 
 
 // Menu management
-function menu_delete_handler(){
+function jotdm_menu_delete_handler(){
+    check_ajax_referer( 'jotdm-ajax-nonce', 'security' );
     $jotdm_flg_success_status = JOTDM_FLAG_SUCCESS;
 
     if (isset($_POST['menu-select'])){
@@ -145,7 +152,8 @@ function menu_delete_handler(){
     }
 }
 
-function menu_edit_handler(){
+function jotdm_menu_edit_handler(){
+    check_ajax_referer( 'jotdm-ajax-nonce', 'security' );
     $jotdm_flg_success_status = JOTDM_FLAG_SUCCESS;
 
     if (isset($_POST['db-host']) &&

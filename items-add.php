@@ -2,6 +2,7 @@
 
 function jotdm_fill_add_page($id, $options, &$db)
 {
+    global $jotdm_ajax_nonce;
     $db_fields = jotdm_get_fields_from_table($options['dataTable'], $db);
     $edit_fields = $options['displayColumns'];
     if ($options['split']) {
@@ -25,7 +26,8 @@ function jotdm_fill_add_page($id, $options, &$db)
 <div class="wrap" data-id="<?php echo esc_attr($id) ?>" data-name="<?php echo esc_attr($id) ?>">
     <h1 class="wp-heading-inline">Add New</h1>
     <p>Add a new entry to this table.</p>
-    <form class="ajax-form" action="<?php echo esc_url(plugins_url('db-edit.php', __FILE__)) ?>" method="post" enctype="multipart/form-data" accept-charset="utf-8">
+    <form class="ajax-form">
+        <input type="hidden" name="security" value="<?php echo $jotdm_ajax_nonce ?>"/>
         <table class="form-table">
             <tbody>
 
