@@ -52,7 +52,7 @@ function jotdm_init_menu() {
 			$options['name'], 
 			'manage_options', 
 			'db-edit/'.$key.'-list.php', 
-			function() use ($key, $options, &$db) { fill_list_page($key, $options, $db); }, 
+			function() use ($key, $options, &$db) { jotdm_fill_list_page($key, $options, $db); }, 
 			$options['icon'], 
 			6  );
 

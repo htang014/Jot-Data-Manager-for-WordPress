@@ -1,5 +1,5 @@
 <?php
-function fill_list_page($id, $options, &$db)
+function jotdm_fill_list_page($id, $options, &$db)
 {
     global $jotdm_ajax_nonce;
     $db_fields = jotdm_get_fields_from_table($options['dataTable'], $db);
