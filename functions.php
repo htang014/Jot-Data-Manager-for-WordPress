@@ -340,7 +340,7 @@ function jotdm_edit_db_image($options, $pos, &$db, $image=null){
         $statement->execute();
     }
     else {
-        jotdm_edit_db_entry($options, $pos, array($options['imageSource'] => DEFAULT_PROFILE_IMAGE));
+        jotdm_edit_db_entry($options, $pos, array($options['imageSource'] => JOTDM_DEFAULT_PROFILE_IMAGE), $db);
     }
 }
 
