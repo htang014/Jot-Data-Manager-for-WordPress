@@ -188,7 +188,7 @@ function jotdm_add_db_entry($options, $fields, &$db, $image=null){
     $values_clause = array();
 
     if (isset($image_field)){
-        $imgsrc = isset($image) ? jotdm_upload_image($image, $options['imageUrlRoot']) : DEFAULT_PROFILE_IMAGE;
+        $imgsrc = isset($image) ? jotdm_upload_image($image, $options['imageUrlRoot']) : JOTDM_DEFAULT_PROFILE_IMAGE;
         $tfields[$image_field] = $imgsrc;
     }
     if (isset($order_field)){
