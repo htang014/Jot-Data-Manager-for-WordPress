@@ -7,7 +7,6 @@
 # Jot Data Manager
 
 ```diff
-This plugin is in alpha.
 Currently supports MySQL only.
 ```
 ## Information
