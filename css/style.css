@@ -31,15 +31,15 @@
     margin: 0 0 0 8px !important;
 }
 
-.table-row-rearrange span {
-    cursor: pointer;
-}
-
 .inline-input-wrapper {
     display: flex; 
     align-items: center;
 }
 
-.inline-input-wrapper label{
+.inline-input-wrapper label {
     margin-right: 0.2em;
+}
+
+.clickable {
+    cursor: pointer;
 }

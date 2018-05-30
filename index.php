@@ -2,10 +2,10 @@
 /*
 Plugin Name: Jot Data Manager
 description: A non-technical interface for modifying MySQL tables
-Version: 0.2
+Version: 1.18.522.3
 Author: Hans Tang
 Author URI: https://hanst.me
-License: GPL2
+License: GPLv3
 */
 require_once('includes.php');
 

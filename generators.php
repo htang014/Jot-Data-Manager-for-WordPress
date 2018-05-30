@@ -2,6 +2,12 @@
 // HTML OBJECT GENERATORS
 
 function jotdm_generate_table($id, $options, &$db, $split_state=null, $filter=null){
+    if (isset($_GET['orderby']) &&
+        isset($_GET['order'])){
+
+        $order_by = sanitize_text_field($_GET['orderby']);
+        $order = sanitize_text_field($_GET['order']);
+    }
     $colspan = count($options['displayColumns']) + 1;
     if ($options['order']) {
         $colspan++;
@@ -39,6 +45,9 @@ function jotdm_generate_table($id, $options, &$db, $split_state=null, $filter=nu
             }
             if ($options['order']){
                 $sql_str .= " ORDER BY `".$options['orderBy']."`";
+            }
+            elseif (isset($order_by) && isset($order)){
+                $sql_str .= " ORDER BY `".$order_by."` ".$order;
             }
             $statement = $db->prepare( $sql_str );
             $statement->execute();
@@ -78,7 +87,7 @@ function jotdm_generate_table($id, $options, &$db, $split_state=null, $filter=nu
     return ob_get_clean();
 }
 
-function jotdm_generate_table_item($menu_name, $pos, $values, $order, $imgsrc=NULL)
+function jotdm_generate_table_item($menu_name, $pos, $values, $db_ordered, $imgsrc=NULL)
 {
     ob_start();
 ?>
@@ -112,9 +121,9 @@ function jotdm_generate_table_item($menu_name, $pos, $values, $order, $imgsrc=NU
         <?php 
         endforeach;
 
-        if ($order):
+        if ($db_ordered):
         ?>
-        <td class="table-row-item table-row-rearrange">
+        <td class="table-row-item table-row-rearrange clickable">
             <span class="dashicons dashicons-arrow-up-alt2" data-up-down="up"></span>
             <span class="dashicons dashicons-arrow-down-alt2" data-up-down="down"></span>
         </td>
@@ -127,7 +136,17 @@ function jotdm_generate_table_item($menu_name, $pos, $values, $order, $imgsrc=NU
     return ob_get_clean();
 }
 
-function jotdm_generate_table_header($fields, $order){
+function jotdm_generate_table_header($fields, $db_ordered){
+    if (isset($_GET['page'])){
+        $page = sanitize_text_field($_GET['page']);
+    }
+    if (isset($_GET['orderby']) &&
+        isset($_GET['order'])){
+
+        $order_by = sanitize_text_field($_GET['orderby']);
+        $order = sanitize_text_field($_GET['order']);
+    }
+
     ob_start();
     ?>
 
@@ -135,19 +154,70 @@ function jotdm_generate_table_header($fields, $order){
         <td class="check-column">
             <input type="checkbox" class="administrator"/>
         </td>
-        <?php
-        foreach ($fields as $field): 
-        ?>
-            <th class="row-title"><?php echo ($order?'':'<a>').esc_html(ucwords( $field )).($order?'':'</a>') ?></th>
-        <?php 
-        endforeach;
 
-        if ($order):
+    <?php 
+    foreach ($fields as $field): 
+    ?>
+
+            <th 
+                class="row-title <?php 
+                if (!$db_ordered){
+                    if (isset($order_by) && $order_by==$field){
+                        echo 'sorted '; 
+                    }
+                    else {
+                        echo 'sortable ';
+                    }
+                }
+                echo isset($order) ? esc_attr($order) : 'desc';
+                ?>"
+            >
+
+        <?php 
+        if (!$db_ordered):
         ?>
-            <th class="row-title table-row-rearrange">Rearrange</th>
+
+                <a 
+                    class="sort-link clickable"
+                    href=<?php echo
+                        $_SERVER['PHP_SELF'].
+                        '?page='.esc_attr($page).
+                        '&orderby='.esc_attr($field).
+                        '&order='.(isset($order) && $order=='asc' ? 'desc' : 'asc') 
+                    ?>
+                >
+                    <span>
+            
         <?php
         endif;
         ?>
+                        <?php echo esc_html(ucwords( $field )) ?>
+
+        <?php 
+        if (!$db_ordered):
+        ?>
+
+                    </span>
+                    <span class="sorting-indicator"></span>
+                </a>
+            </th>
+
+        <?php
+        endif;
+        ?>
+
+    <?php 
+    endforeach;
+
+    if ($db_ordered):
+    ?>
+
+        <th class="row-title table-row-rearrange">Rearrange</th>
+
+    <?php
+    endif;
+    ?>
+
     </tr>
 
     <?php
