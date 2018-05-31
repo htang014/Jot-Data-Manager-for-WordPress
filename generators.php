@@ -179,18 +179,16 @@ function jotdm_generate_table_header($fields, $db_ordered){
 
         <?php 
         if (!$db_ordered):
+            $href = $_SERVER['PHP_SELF'].
+                '?page='.esc_attr($page).
+                '&orderby='.esc_attr($field).
+                '&order='.(isset($order) && $order=='asc' ? 'desc' : 'asc');
+            if (isset($filter)) {
+                $href .= '&filter='.$filter;
+            }
         ?>
 
-                <a 
-                    class="sort-link clickable"
-                    href=<?php echo
-                        $_SERVER['PHP_SELF'].
-                        '?page='.esc_attr($page).
-                        '&orderby='.esc_attr($field).
-                        '&order='.(isset($order) && $order=='asc' ? 'desc' : 'asc').
-                        '&filter='.$filter
-                    ?>
-                >
+                <a class="sort-link clickable" href=<?php echo $href ?>>
                     <span>
             
         <?php
