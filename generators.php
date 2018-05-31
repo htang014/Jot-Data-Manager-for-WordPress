@@ -1,7 +1,9 @@
 <?php
 // HTML OBJECT GENERATORS
 
-function jotdm_generate_table($id, $options, &$db, $split_state=null, $filter=null){
+function jotdm_generate_table($id, $options, &$db, $split_state=null){
+    $filter = isset($_GET['filter']) ? sanitize_text_field($_GET['filter']) : null;
+
     if (isset($_GET['orderby']) &&
         isset($_GET['order'])){
 
@@ -137,6 +139,8 @@ function jotdm_generate_table_item($menu_name, $pos, $values, $db_ordered, $imgs
 }
 
 function jotdm_generate_table_header($fields, $db_ordered){
+    $filter = isset($_GET['filter']) ? sanitize_text_field($_GET['filter']) : null;
+
     if (isset($_GET['page'])){
         $page = sanitize_text_field($_GET['page']);
     }
@@ -183,7 +187,8 @@ function jotdm_generate_table_header($fields, $db_ordered){
                         $_SERVER['PHP_SELF'].
                         '?page='.esc_attr($page).
                         '&orderby='.esc_attr($field).
-                        '&order='.(isset($order) && $order=='asc' ? 'desc' : 'asc') 
+                        '&order='.(isset($order) && $order=='asc' ? 'desc' : 'asc').
+                        '&filter='.$filter
                     ?>
                 >
                     <span>

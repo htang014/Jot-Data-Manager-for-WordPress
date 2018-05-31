@@ -7,7 +7,7 @@ function jotdm_fill_list_page($id, $options, &$db)
     $image_field = $options['image'] ? $options['imageSource'] : null;
     $split_field = $options['split'] ? $options['splitBy'] : null;
 
-    $filter = isset($_GET['filter']) ? $_GET['filter'] : null;
+    //$filter = isset($_GET['filter']) ? sanitize_text_field($_GET['filter']) : null;
     ?>
     
     <div class="wrap" data-id="<?php echo esc_attr($id) ?>" data-name="<?php echo esc_attr($id) ?>">
@@ -50,9 +50,12 @@ function jotdm_fill_list_page($id, $options, &$db)
     $statement->execute();
     $statement->setFetchMode(PDO::FETCH_ASSOC);
     while ($row = $statement->fetch()) {
-        echo jotdm_generate_table($id, $options, $db,
-            $options['split'] ? $row[$options['splitBy']] : NULL,
-            $filter);
+        echo jotdm_generate_table(
+            $id, 
+            $options, 
+            $db,
+            $options['split'] ? $row[$options['splitBy']] : NULL
+        );
     }
     ?>
 		</form>
