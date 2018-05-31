@@ -1,22 +1,30 @@
-=== Plugin Name ===
-Contributors: leetsombrero
-Tags: database, mysql, data, table, editor, sql, list
-Requires at least: 4.9.5
-Tested up to: 4.9.6
-Requires PHP: 7.1.7
-Stable tag: 1.18.522.3
-License: GPLv3
-License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
-== Description ==
+<img src="https://i.imgur.com/E3D0T2A.png"
+     alt="icon"
+     height="128"
+     style="float: left; margin-right: 10px;" />
+     
+# Jot Data Manager
+
+```diff
+Currently supports MySQL only.
+```
+## Information
+
+### Description
 <p>Jot allows non-technical WordPress administrators to modify MySQL
-tables with a lightweight, user-friendly interface.  This plugin currently supports MySQL only.</p>
+tables with a lightweight, user-friendly interface.</p>
 
 ### Features
 * Create menus directly in the WordPress administration page to view and interact with tables
 * Quickly add and edit single entries to the data table
 * Associate table entries with images, which are uploaded and managed using the Jot interface
 * Rearrange table entries or split entries into multiple tables
+
+### Installation
+* Download project as zip
+* Upload to WordPress project via the plugins menu
+* Activate plugin
 
 ### Usage
 #### Creating a menu
@@ -42,19 +50,24 @@ tables with a lightweight, user-friendly interface.  This plugin currently suppo
      * The image directory will be defined during setup
 * To use your own default image (used when no association is made), 
        simply add a "blank-profile-picture.jpg" to your image directory
-       
-== Screenshots ==
-1. Display page for an Employees data table
-2. Display page for a Projects data table
-3. Edit page for a table entry
-4. Page to add a new table entry
 
-== Installation ==
-#### Automatic installation
-* Log in to your WordPress dashboard
-* Navigate to the Plugins menu and click Add New.
-* Search for Jot and download it directly
-* Activate Jot in your Plugins menu
+## Screenshots:
+<img src="https://i.imgur.com/PiYq2sW.png"
+     alt="Display Page"
+     style="float: left; margin-right: 10px;" />
 
-#### Manual installation
-To manually install this plugin, you must upload it to your WordPress plugin directory. The WordPress codex contains [instructions on how to do this here](https://codex.wordpress.org/Managing_Plugins#Manual_Plugin_Installation).
+<img src="https://i.imgur.com/CLpzucS.png"
+     alt="Display Page 2"
+     style="float: left; margin-right: 10px;" />
+
+<img src="https://i.imgur.com/mIuDTfL.png"
+     alt="Edit Entry Page"
+     style="float: left; margin-right: 10px;" />
+     
+<img src="https://i.imgur.com/nFTwktu.png"
+     alt="Add Entry Page"
+     style="float: left; margin-right: 10px;" />
+     
+<img src="https://i.imgur.com/75Z7ngI.png"
+     alt="Settings Page"
+     style="float: left; margin-right: 10px;" />
