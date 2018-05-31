@@ -37,7 +37,7 @@ function jotdm_generate_table($id, $options, &$db, $split_state=null){
                $sql_str .= " WHERE `".$options['splitBy']."`='".$split_state."'";
             }
             if (isset($filter)){
-                $sql_str .= " AND (";
+                $sql_str .= ($options['split']?" AND ":" WHERE ")."(";
 
                 $cond_arr = array();
                 foreach ($options['displayColumns'] as $field){
@@ -51,6 +51,7 @@ function jotdm_generate_table($id, $options, &$db, $split_state=null){
             elseif (isset($order_by) && isset($order)){
                 $sql_str .= " ORDER BY `".$order_by."` ".$order;
             }
+            echo $sql_str;
             $statement = $db->prepare( $sql_str );
             $statement->execute();
             $statement->setFetchMode( PDO::FETCH_ASSOC );
